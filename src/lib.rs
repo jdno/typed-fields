@@ -27,4 +27,5 @@
 // All public items in this library must have documentation.
 #![warn(missing_docs)]
 
+mod name;
 mod number;
