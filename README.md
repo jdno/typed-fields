@@ -1,6 +1,9 @@
-# 🚀 My Personal Template Repository
+# 🦀 `typed-fields`
 
-This is a [template repository] for my personal projects.
+Do you like strongly-typed structs?
+
+`typed-fields` is a collection of macros that generate types following the
+[newtype] pattern.
 
 ## License
 
@@ -17,4 +20,4 @@ Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
 dual licensed as above, without any additional terms or conditions.
 
-[template repository]: https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
+[newtype]: https://doc.rust-lang.org/rust-by-example/generics/new_types.html
