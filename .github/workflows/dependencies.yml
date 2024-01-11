@@ -1,0 +1,33 @@
+---
+name: Dependencies
+
+"on":
+  schedule:
+    # Run schedule every day at 4:44 UTC
+    - cron: "44 4 * * *"
+  workflow_dispatch:
+
+jobs:
+  latest:
+    name: Latest versions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up beta toolchain
+        uses: dtolnay/rust-toolchain@beta
+
+      - name: Cache build artifacts
+        uses: swatinem/rust-cache@v2.7.2
+        with:
+          prefix-key: latest-v1
+
+      - name: Update dependencies
+        run: cargo update
+
+      - name: Run tests
+        env:
+          RUSTFLAGS: "-D deprecated"
+        run: cargo test --all-features --all-targets --locked
