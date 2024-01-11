@@ -9,3 +9,16 @@ updates:
     labels:
       - "C-dependency"
       - "L-github"
+
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    ignore:
+      - dependency-name: "*"
+        # Ignore patch and minor versions of dependencies, since they do not
+        # matter for a library. Major versions might require a version bump of
+        # the library itself.
+        update-types:
+          - "version-update:semver-minor"
+          - "version-update:semver-patch"
