@@ -20,7 +20,7 @@ jobs:
         uses: dtolnay/rust-toolchain@beta
 
       - name: Cache build artifacts
-        uses: swatinem/rust-cache@v2.7.2
+        uses: swatinem/rust-cache@v2.7.3
         with:
           prefix-key: latest-v1
 
