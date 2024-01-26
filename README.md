@@ -3,7 +3,31 @@
 Do you like strongly-typed structs?
 
 `typed-fields` is a collection of macros that generate types following the
-[newtype] pattern.
+[newtype] pattern. The following types are currently supported:
+
+- `name!` - a string-based type
+- `number!` - a number-based type
+- `secret!` - a type for secrets (requires the `secret` feature)
+
+## Example
+
+The following example showcases the `number!` macro, which generates a new type
+that is backed by an `i64`.
+
+```rust
+use typed_fields::number;
+
+// Define a new type that is backed by an `i64`
+number!(UserId);
+
+fn main() {
+    // Create a new `UserId` from an `i64`
+    let id = UserId::new(42);
+
+    // Common traits like `Display` are automatically implemented for the type
+    println!("User ID: {}", id);
+}
+```
 
 ## License
 
