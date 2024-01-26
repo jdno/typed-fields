@@ -1,10 +1,10 @@
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 use typed_fields::secret;
 
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 secret!(TestSecret);
 
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 #[test]
 fn expose() {
     let secret = TestSecret::new("test");
@@ -12,7 +12,7 @@ fn expose() {
     assert_eq!("test", secret.expose());
 }
 
-#[cfg(all(feature = "secrecy", feature = "serde"))]
+#[cfg(all(feature = "secret", feature = "serde"))]
 #[test]
 fn trait_deserialize() {
     let json = r#""test""#;
@@ -22,7 +22,7 @@ fn trait_deserialize() {
     assert_eq!("test", config.expose());
 }
 
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 #[test]
 fn trait_display() {
     let secret = TestSecret::new("test");
@@ -30,33 +30,33 @@ fn trait_display() {
     assert_eq!("[REDACTED]", secret.to_string());
 }
 
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 #[test]
 fn trait_from_str() {
     let _secret: TestSecret = "test".into();
 }
 
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 #[test]
 fn trait_from_string() {
     let _secret: TestSecret = "test".into();
 }
 
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 #[test]
 fn trait_send() {
     fn assert_send<T: Send>() {}
     assert_send::<TestSecret>();
 }
 
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 #[test]
 fn trait_sync() {
     fn assert_sync<T: Sync>() {}
     assert_sync::<TestSecret>();
 }
 
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 #[test]
 fn trait_unpin() {
     fn assert_unpin<T: Unpin>() {}

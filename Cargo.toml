@@ -14,6 +14,7 @@ proc-macro = true
 # https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
+secret = ["dep:secrecy"]
 serde = [
     "dep:serde",
     "secrecy?/serde"

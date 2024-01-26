@@ -31,7 +31,7 @@ use proc_macro::TokenStream;
 
 mod name;
 mod number;
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 mod secret;
 
 /// Generate a new type for a string
@@ -103,7 +103,7 @@ pub fn number(input: TokenStream) -> TokenStream {
 /// let token: ApiToken = "super-secret-api-token".into();
 /// let header = format!("Authorization: Bearer {}", token.expose());
 /// ```
-#[cfg(feature = "secrecy")]
+#[cfg(feature = "secret")]
 #[proc_macro]
 pub fn secret(input: TokenStream) -> TokenStream {
     secret::secret_impl(input)
