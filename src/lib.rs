@@ -31,6 +31,8 @@ use proc_macro::TokenStream;
 
 mod name;
 mod number;
+#[cfg(feature = "secrecy")]
+mod secret;
 
 /// Generate a new type for a string
 ///
@@ -80,4 +82,29 @@ pub fn name(input: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn number(input: TokenStream) -> TokenStream {
     number::number_impl(input)
+}
+
+/// Generate a new type for a secret
+///
+/// The `secret!` macro generates a new type for secrets such as passwords and API tokens. The type
+/// uses the [`secrecy`](https://crates.io/crates/secrecy) crate internally to prevent accidentally
+/// leaking the inner value in debug or log statements.
+///
+/// The new type implements common traits like `Display` and `From<&str>` and `From<String>`. The
+/// inner value can be revealed using the `expose` method.
+///
+/// # Example
+///
+/// ```rust
+/// use typed_fields::secret;
+///
+/// secret!(ApiToken);
+///
+/// let token: ApiToken = "super-secret-api-token".into();
+/// let header = format!("Authorization: Bearer {}", token.expose());
+/// ```
+#[cfg(feature = "secrecy")]
+#[proc_macro]
+pub fn secret(input: TokenStream) -> TokenStream {
+    secret::secret_impl(input)
 }
