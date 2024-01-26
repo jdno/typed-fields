@@ -9,6 +9,16 @@ fn get() {
     assert_eq!("test", name.get());
 }
 
+#[cfg(feature = "serde")]
+#[test]
+fn trait_deserialize() {
+    let json = r#""test""#;
+
+    let name: TestName = serde_json::from_str(json).unwrap();
+
+    assert_eq!("test", name.get());
+}
+
 #[test]
 fn trait_display() {
     let name = TestName::new("test");
@@ -30,6 +40,16 @@ fn trait_from_str() {
 fn trait_send() {
     fn assert_send<T: Send>() {}
     assert_send::<TestName>();
+}
+
+#[cfg(feature = "serde")]
+#[test]
+fn trait_serialize() {
+    let name = TestName::new("test");
+
+    let json = serde_json::to_string(&name).unwrap();
+
+    assert_eq!(r#""test""#, json);
 }
 
 #[test]

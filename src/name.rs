@@ -6,9 +6,10 @@ use syn::parse_macro_input;
 
 pub fn name_impl(input: TokenStream) -> TokenStream {
     let ident = parse_macro_input!(input as Ident);
+    let derives = derives();
 
     let newtype = quote! {
-        #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+        #derives
         pub struct #ident(String);
 
         impl #ident {
@@ -41,4 +42,26 @@ pub fn name_impl(input: TokenStream) -> TokenStream {
     };
 
     newtype.into()
+}
+
+fn derives() -> proc_macro2::TokenStream {
+    let mut derives = quote! {
+        #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
+    };
+
+    derives.extend(derive_serde());
+
+    derives
+}
+
+#[cfg(feature = "serde")]
+fn derive_serde() -> proc_macro2::TokenStream {
+    quote! {
+        #[derive(serde::Deserialize, serde::Serialize)]
+    }
+}
+
+#[cfg(not(feature = "serde"))]
+fn derive_serde() -> proc_macro2::TokenStream {
+    quote! {}
 }
