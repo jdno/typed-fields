@@ -133,7 +133,7 @@ jobs:
 
     strategy:
       matrix:
-        msrv: [1.56.1]
+        msrv: [1.60.0]
 
     needs: detect-changes
     if: needs.detect-changes.outputs.any_changed == 'true'

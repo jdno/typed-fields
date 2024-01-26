@@ -3,8 +3,9 @@ name = "typed-fields"
 version = "0.0.0"
 edition = "2021"
 
-# Setting the MSRV is only supported from 1.56.0 onwards.
-rust-version = "1.56"
+# We use the weak dependency feature to enable serde for optional dependencies.
+# https://blog.rust-lang.org/2022/04/07/Rust-1.60.0.html#new-syntax-for-cargo-features
+rust-version = "1.60"
 
 [lib]
 proc-macro = true
@@ -12,9 +13,16 @@ proc-macro = true
 # See more keys and their definitions at
 # https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+serde = [
+    "dep:serde",
+    "secrecy?/serde"
+]
+
 [dependencies]
 proc-macro2 = "1.0.60"
 quote = "1.0.25"
+secrecy = { version = "0.4.1", optional = true }
 serde = { version = "1.0.103", features = ["derive"], optional = true }
 syn = { version = "2.0.0", features = ["extra-traits"] }
 
