@@ -3,6 +3,10 @@ name = "typed-fields"
 version = "0.1.0"
 edition = "2021"
 
+description = "A collection of macros that generate newtypes"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/jdno/typed-fields"
+
 # We use the weak dependency feature to enable serde for optional dependencies.
 # https://blog.rust-lang.org/2022/04/07/Rust-1.60.0.html#new-syntax-for-cargo-features
 rust-version = "1.60"
