@@ -6,7 +6,13 @@ edition = "2021"
 # Setting the MSRV is only supported from 1.56.0 onwards.
 rust-version = "1.56"
 
+[lib]
+proc-macro = true
+
 # See more keys and their definitions at
 # https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+proc-macro2 = "1.0.60"
+quote = "1.0.25"
+syn = { version = "2.0.0", features = ["extra-traits"] }
