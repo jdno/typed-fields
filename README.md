@@ -8,6 +8,7 @@ Do you like strongly-typed structs?
 - `name!` - a string-based type
 - `number!` - a number-based type
 - `secret!` - a type for secrets (requires the `secret` feature)
+- `url!` - a type for URLs (requires the `url` feature)
 
 ## Example
 
