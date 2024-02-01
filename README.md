@@ -9,6 +9,7 @@ Do you like strongly-typed structs?
 - `number!` - a number-based type
 - `secret!` - a type for secrets (requires the `secret` feature)
 - `url!` - a type for URLs (requires the `url` feature)
+- `uuid!` - a type for UUIDs (requires the `uuid` feature)
 
 ## Example
 

@@ -35,6 +35,8 @@ mod number;
 mod secret;
 #[cfg(feature = "url")]
 mod url;
+#[cfg(feature = "uuid")]
+mod uuid;
 
 /// Generate a new type for a string
 ///
@@ -136,4 +138,31 @@ pub fn secret(input: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn url(input: TokenStream) -> TokenStream {
     url::url_impl(input)
+}
+
+/// Generate a new type for a UUID
+///
+/// The `uuid!` macro generates a new type that is backed by a `Uuid` from the [`uuid`] crate. The
+/// new type implements common traits like `Display` and `TryFrom<&str>` and `TryFrom<String>`. The
+/// inner value can be accessed using the `get` method.
+///
+/// # Example
+///
+/// ```rust
+/// use typed_fields::uuid;
+///
+/// uuid!(UserId);
+///
+/// fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let id: UserId = "67e55044-10b1-426f-9247-bb680e5fe0c8".try_into()?;
+///     # Ok(())
+///     // Do something with the URL...
+/// }
+/// ```
+///
+/// [`uuid`]: https://crates.io/crates/uuid
+#[cfg(feature = "uuid")]
+#[proc_macro]
+pub fn uuid(input: TokenStream) -> TokenStream {
+    uuid::uuid_impl(input)
 }
