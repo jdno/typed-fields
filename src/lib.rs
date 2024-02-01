@@ -33,6 +33,8 @@ mod name;
 mod number;
 #[cfg(feature = "secret")]
 mod secret;
+#[cfg(feature = "url")]
+mod url;
 
 /// Generate a new type for a string
 ///
@@ -107,4 +109,31 @@ pub fn number(input: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn secret(input: TokenStream) -> TokenStream {
     secret::secret_impl(input)
+}
+
+/// Generate a new type for a URL
+///
+/// The `url!` macro generates a new type that is backed by a `Url` from the [`url`] crate. The new
+/// type implements common traits like `Display` and `TryFrom<&str>` and `TryFrom<String>`. The
+/// inner value can be accessed using the `get` method.
+///
+/// # Example
+///
+/// ```rust
+/// use typed_fields::url;
+///
+/// url!(BackendUrl);
+///
+/// fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let url: BackendUrl = "https://api.example.com".try_into()?;
+///     # Ok(())
+///     // Do something with the URL...
+/// }
+/// ```
+///
+/// [`url`]: https://crates.io/crates/url
+#[cfg(feature = "url")]
+#[proc_macro]
+pub fn url(input: TokenStream) -> TokenStream {
+    url::url_impl(input)
 }
