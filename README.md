@@ -8,6 +8,7 @@ Do you like strongly-typed structs?
 - `name!` - a string-based type
 - `number!` - a number-based type
 - `secret!` - a type for secrets (requires the `secret` feature)
+- `ulid!` - a type for ULIDs (requires the `ulid` feature)
 - `url!` - a type for URLs (requires the `url` feature)
 - `uuid!` - a type for UUIDs (requires the `uuid` feature)
 
@@ -35,8 +36,10 @@ fn main() {
 
 Licensed under either of
 
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
+- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE)
+  or <http://www.apache.org/licenses/LICENSE-2.0>)
+- MIT license ([LICENSE-MIT](LICENSE-MIT)
+  or <http://opensource.org/licenses/MIT>)
 
 at your option.
 

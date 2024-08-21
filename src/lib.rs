@@ -33,6 +33,8 @@ mod name;
 mod number;
 #[cfg(feature = "secret")]
 mod secret;
+#[cfg(feature = "ulid")]
+mod ulid;
 #[cfg(feature = "url")]
 mod url;
 #[cfg(feature = "uuid")]
@@ -111,6 +113,33 @@ pub fn number(input: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn secret(input: TokenStream) -> TokenStream {
     secret::secret_impl(input)
+}
+
+/// Generate a new type for a ULID
+///
+/// The `ulid!` macro generates a new type that is backed by a `Ulid` from the [`ulid`] crate. The
+/// new type implements common traits like `Display` and `From<&str>` and `From<String>`. The inner
+/// value can be accessed using the `get` method.
+///
+/// # Example
+///
+/// ```rust
+/// use typed_fields::ulid;
+///
+/// ulid!(UserId);
+///
+/// fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let id: UserId = "01ARZ3NDEKTSV4RRFFQ69G5FAV".try_into()?;
+///     # Ok(())
+///     // Do something with the URL...
+/// }
+/// ```
+///
+/// [`ulid`]: https://crates.io/crates/ulid
+#[cfg(feature = "ulid")]
+#[proc_macro]
+pub fn ulid(input: TokenStream) -> TokenStream {
+    ulid::ulid_impl(input)
 }
 
 /// Generate a new type for a URL
