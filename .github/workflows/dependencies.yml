@@ -2,6 +2,9 @@
 name: Dependencies
 
 "on":
+  push:
+    paths:
+      - Earthfile
   schedule:
     # Run schedule every day at 4:44 UTC
     - cron: "44 4 * * *"
@@ -16,18 +19,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up beta toolchain
-        uses: dtolnay/rust-toolchain@beta
-
-      - name: Cache build artifacts
-        uses: swatinem/rust-cache@v2.7.5
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
         with:
-          prefix-key: latest-v1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.8
 
-      - name: Update dependencies
-        run: cargo update
-
-      - name: Run tests
-        env:
-          RUSTFLAGS: "-D deprecated"
-        run: cargo test --all-features --all-targets --locked
+      - name: Run tests with latest dependency versions
+        run: earthly +deps-latest
