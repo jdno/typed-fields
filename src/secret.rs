@@ -14,7 +14,7 @@ pub fn secret_impl(input: TokenStream) -> TokenStream {
 
         impl #ident {
             pub fn new(secret: &str) -> Self {
-                Self(secrecy::SecretString::new(String::from(secret)))
+                Self(secret.into())
             }
 
             pub fn expose(&self) -> &str {
@@ -31,13 +31,13 @@ pub fn secret_impl(input: TokenStream) -> TokenStream {
 
         impl From<&str> for #ident {
             fn from(secret: &str) -> #ident {
-                #ident(secrecy::SecretString::new(String::from(secret)))
+                #ident(secret.into())
             }
         }
 
         impl From<String> for #ident {
             fn from(secret: String) -> #ident {
-                #ident(secrecy::SecretString::new(secret))
+                #ident(secret.into())
             }
         }
     };
