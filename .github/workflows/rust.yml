@@ -178,7 +178,7 @@ jobs:
           version: 0.8
 
       - name: Run tests with test coverage
-        run: earthly --allow-privileged --ci +test --SAVE_REPORT=yes
+        run: earthly --allow-privileged --strict +test --SAVE_REPORT=yes
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v5
