@@ -26,7 +26,7 @@ jobs:
       - name: Run tests with test coverage
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --allow-privileged --org jdno --sat xsmall-amd64-1 --strict +all --SAVE_REPORT=yes
+        run: earthly --allow-privileged --org jdno --sat small-amd64-1 --strict +all --SAVE_REPORT=yes
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v5
