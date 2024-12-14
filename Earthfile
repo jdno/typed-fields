@@ -4,6 +4,16 @@ PROJECT jdno/typed-fields
 FROM rust:1.82.0-slim
 WORKDIR /typed-fields
 
+all:
+    BUILD +deps-latest
+    BUILD +deps-minimal
+    BUILD +doc
+    BUILD +features
+    BUILD +format
+    BUILD +lint
+    BUILD +msrv
+    BUILD +test
+
 os:
     # Install clippy and rustfmt
     RUN rustup component add clippy rustfmt
