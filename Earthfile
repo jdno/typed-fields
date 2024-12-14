@@ -5,34 +5,68 @@ FROM rust:1.82.0-slim
 WORKDIR /typed-fields
 
 all:
-    BUILD +deps-latest
-    BUILD +deps-minimal
-    BUILD +doc
-    BUILD +features
-    BUILD +format
-    BUILD +lint
-    BUILD +msrv
-    BUILD +test
+    BUILD +json-format
+    BUILD +markdown-format
+    BUILD +markdown-lint
+    BUILD +rust-deps-latest
+    BUILD +rust-deps-minimal
+    BUILD +rust-doc
+    BUILD +rust-features
+    BUILD +rust-format
+    BUILD +rust-lint
+    BUILD +rust-msrv
+    BUILD +rust-test
+    BUILD +yaml-format
+    BUILD +yaml-lint
 
-os:
+json-format:
+    FROM +prettier-container
+
+    # Check the JSON formatting
+    RUN prettier --check **/*.json
+
+markdown-format:
+    FROM +prettier-container
+
+    # Check the Markdown formatting
+    RUN prettier --check **/*.md
+
+markdown-lint:
+    FROM node:alpine
+    WORKDIR /typed-fields
+
+    # Install markdownlint
+    RUN npm install -g markdownlint-cli
+
+    # Copy the source code into the container
+    COPY . .
+
+    # Check the Markdown for linting errors
+    RUN markdownlint **/*.md
+
+prettier-container:
+    FROM node:alpine
+    WORKDIR /typed-fields
+
+    # Install prettier
+    RUN npm install -g prettier
+
+    # Copy the source code into the container
+    COPY . .
+
+rust-container:
     # Install clippy and rustfmt
     RUN rustup component add clippy rustfmt
 
-sources:
-    FROM +os
+rust-sources:
+    FROM +rust-container
 
     # Copy the source code in a cache-friendly way
     COPY Cargo.toml Cargo.lock ./
     COPY --dir src tests ./
 
-build:
-    FROM +sources
-
-    # Build the project to cache the target directory
-    RUN cargo build
-
-deps-latest:
-    FROM +sources
+rust-deps-latest:
+    FROM +rust-sources
 
     # Switch to beta toolchain
     RUN rustup default beta
@@ -43,8 +77,8 @@ deps-latest:
     # Run tests to ensure the latest versions are compatible
     RUN RUSTFLAGS="-D deprecated" cargo test --all-features --all-targets --locked
 
-deps-minimal:
-    FROM +sources
+rust-deps-minimal:
+    FROM +rust-sources
 
     # Switch to nightly toolchain
     RUN rustup default nightly
@@ -55,8 +89,8 @@ deps-minimal:
     # Run tests to ensure the minimal versions are compatible
     RUN cargo test --all-features --all-targets --locked
 
-doc:
-    FROM +sources
+rust-doc:
+    FROM +rust-sources
 
     # Generate the documentation
     RUN cargo doc --all-features --no-deps
@@ -64,8 +98,8 @@ doc:
     # Save the documentation to the local filesystem
     SAVE ARTIFACT target/doc AS LOCAL target/doc
 
-features:
-    FROM +sources
+rust-features:
+    FROM +rust-sources
 
     # Install cargo-hack
     RUN cargo install cargo-hack
@@ -73,19 +107,19 @@ features:
     # Test combinations of features
     RUN cargo hack --feature-powerset check --lib --tests
 
-format:
-    FROM +sources
+rust-format:
+    FROM +rust-sources
 
     # Check the code formatting
     RUN cargo fmt --all --check
 
-lint:
-    FROM +sources
+rust-lint:
+    FROM +rust-sources
 
     # Check the code for linting errors
     RUN cargo clippy --all-targets --all-features -- -D warnings
 
-msrv:
+rust-msrv:
     ARG MSRV="1.61.0"
 
     FROM "rust:$MSRV-slim"
@@ -97,17 +131,17 @@ msrv:
     # Check that the project compiles with the MSRV
     RUN cargo +$MSRV check --all-features --all-targets
 
-publish:
-    FROM +sources
+rust-publish:
+    FROM +rust-sources
 
     # Publish the crate to crates.io
     RUN --secret CARGO_REGISTRY_TOKEN cargo publish -v --all-features --token "$CARGO_REGISTRY_TOKEN"
 
-test:
+rust-test:
     # Optionally save the report to the local filesystem
     ARG SAVE_REPORT=""
 
-    FROM +os
+    FROM +rust-container
 
     # Install cargo-binstall
     RUN cargo install cargo-binstall
@@ -131,3 +165,19 @@ test:
     IF [ "$SAVE_REPORT" != "" ]
         SAVE ARTIFACT cobertura.xml AS LOCAL cobertura.xml
     END
+
+yaml-format:
+    FROM +prettier-container
+
+    # Check the YAML formatting
+    RUN prettier --check **/*.{yml,yaml}
+
+yaml-lint:
+    FROM pipelinecomponents/yamllint:latest
+    WORKDIR /typed-fields
+
+    # Copy the source code into the container
+    COPY . .
+
+    # Check the YAML files for linting errors
+    RUN yamllint .

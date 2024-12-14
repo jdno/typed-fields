@@ -29,4 +29,4 @@ jobs:
       - name: Run tests with latest dependency versions
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +deps-latest
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +rust-deps-latest
