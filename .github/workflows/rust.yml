@@ -26,6 +26,7 @@ jobs:
         with:
           files: |
             .github/workflows/rust.yml
+            Earthfile
             **/*.rs
             **/*.toml
 
@@ -46,16 +47,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up nightly toolchain
-        uses: dtolnay/rust-toolchain@nightly
-
-      - name: Cache build artifacts
-        uses: swatinem/rust-cache@v2.7.5
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
         with:
-          prefix-key: nightly-v1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.8
 
-      - name: Run Clippy
-        run: cargo doc --all-features --no-deps
+      - name: Compile the documentation
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +doc
 
   features:
     name: Test features
@@ -68,17 +69,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache build artifacts
-        uses: swatinem/rust-cache@v2.7.5
-
-      - name: Install cargo-hack
-        uses: taiki-e/install-action@cargo-hack
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.8
 
       - name: Test combinations of features
-        run: cargo hack --feature-powerset check --lib --tests
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +features
 
   lint:
     name: Lint code
@@ -91,16 +91,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up stable toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
         with:
-          components: clippy
-
-      - name: Cache build artifacts
-        uses: swatinem/rust-cache@v2.7.5
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.8
 
       - name: Run Clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +lint
 
   minimal:
     name: Test minimal versions
@@ -113,19 +113,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up nightly toolchain
-        uses: dtolnay/rust-toolchain@nightly
-
-      - name: Cache build artifacts
-        uses: swatinem/rust-cache@v2.7.5
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
         with:
-          prefix-key: nightly-v1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.8
 
-      - name: Set minimal versions for dependencies
-        run: cargo update -Z direct-minimal-versions
-
-      - name: Run tests
-        run: cargo test --all-features --all-targets --locked
+      - name: Run tests with minimal versions
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +deps-minimal
 
   msrv:
     name: MSRV
@@ -142,18 +139,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up stable toolchain
-        uses: dtolnay/rust-toolchain@master
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
         with:
-          toolchain: ${{ matrix.msrv }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.8
 
-      - name: Cache build artifacts
-        uses: swatinem/rust-cache@v2.7.5
-        with:
-          prefix-key: ${{ matrix.msrv }}-v1
-
-      - name: Check code
-        run: cargo +${{ matrix.msrv }} check --all-features --all-targets
+      - name: Check code with MSRV
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +msrv
 
   style:
     name: Check style
@@ -166,13 +161,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up stable toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
         with:
-          components: rustfmt
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.8
 
       - name: Run Rustfmt
-        run: cargo fmt --all -- --check
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +format
 
   test:
     name: Run tests
@@ -181,29 +179,20 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.any_changed == 'true'
 
-    container:
-      image: xd009642/tarpaulin:0.27.2-slim
-      options: --security-opt seccomp=unconfined
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Cache build artifacts
-        uses: swatinem/rust-cache@v2.7.5
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
         with:
-          prefix-key: tarpaulin-v1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.8
 
       - name: Run tests with test coverage
-        run: |
-          cargo tarpaulin \
-            --all-features \
-            --all-targets \
-            --out Xml \
-            --skip-clean \
-            --target-dir target/tarpaulin-target/ \
-            --timeout 120 \
-            --verbose
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --allow-privileged --org jdno --sat xsmall-amd64-1 --strict +test --SAVE_REPORT=yes
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v5
