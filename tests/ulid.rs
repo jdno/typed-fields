@@ -1,3 +1,6 @@
+// TODO: Debug this warning, fix its cause, and remove this directive.
+#![allow(non_local_definitions)]
+
 #[cfg(feature = "ulid")]
 use std::convert::TryInto;
 #[cfg(feature = "ulid")]

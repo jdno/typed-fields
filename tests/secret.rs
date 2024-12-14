@@ -1,3 +1,6 @@
+// TODO: Debug this warning, fix its cause, and remove this directive.
+#![allow(non_local_definitions)]
+
 #[cfg(feature = "secret")]
 use typed_fields::secret;
 
