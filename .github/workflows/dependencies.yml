@@ -26,4 +26,4 @@ jobs:
           version: 0.8
 
       - name: Run tests with latest dependency versions
-        run: earthly +deps-latest
+        run: earthly --ci +deps-latest

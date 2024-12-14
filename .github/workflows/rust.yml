@@ -54,7 +54,7 @@ jobs:
           version: 0.8
 
       - name: Compile the documentation
-        run: earthly +doc
+        run: earthly --ci +doc
 
   features:
     name: Test features
@@ -74,7 +74,7 @@ jobs:
           version: 0.8
 
       - name: Test combinations of features
-        run: earthly +features
+        run: earthly --ci +features
 
   lint:
     name: Lint code
@@ -94,7 +94,7 @@ jobs:
           version: 0.8
 
       - name: Run Clippy
-        run: earthly +lint
+        run: earthly --ci +lint
 
   minimal:
     name: Test minimal versions
@@ -114,7 +114,7 @@ jobs:
           version: 0.8
 
       - name: Run tests with minimal versions
-        run: earthly +deps-minimal
+        run: earthly --ci +deps-minimal
 
   msrv:
     name: MSRV
@@ -138,7 +138,7 @@ jobs:
           version: 0.8
 
       - name: Check code with MSRV
-        run: earthly +msrv
+        run: earthly --ci +msrv
 
   style:
     name: Check style
@@ -158,7 +158,7 @@ jobs:
           version: 0.8
 
       - name: Run Rustfmt
-        run: earthly +format
+        run: earthly --ci +format
 
   test:
     name: Run tests
@@ -178,7 +178,7 @@ jobs:
           version: 0.8
 
       - name: Run tests with test coverage
-        run: earthly --allow-privileged +test --SAVE_REPORT=yes
+        run: earthly --allow-privileged --ci +test --SAVE_REPORT=yes
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v5
