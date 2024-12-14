@@ -54,7 +54,9 @@ jobs:
           version: 0.8
 
       - name: Compile the documentation
-        run: earthly --ci +doc
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +doc
 
   features:
     name: Test features
@@ -74,7 +76,9 @@ jobs:
           version: 0.8
 
       - name: Test combinations of features
-        run: earthly --ci +features
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +features
 
   lint:
     name: Lint code
@@ -94,7 +98,9 @@ jobs:
           version: 0.8
 
       - name: Run Clippy
-        run: earthly --ci +lint
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +lint
 
   minimal:
     name: Test minimal versions
@@ -114,7 +120,9 @@ jobs:
           version: 0.8
 
       - name: Run tests with minimal versions
-        run: earthly --ci +deps-minimal
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +deps-minimal
 
   msrv:
     name: MSRV
@@ -138,7 +146,9 @@ jobs:
           version: 0.8
 
       - name: Check code with MSRV
-        run: earthly --ci +msrv
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +msrv
 
   style:
     name: Check style
@@ -158,7 +168,9 @@ jobs:
           version: 0.8
 
       - name: Run Rustfmt
-        run: earthly --ci +format
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +format
 
   test:
     name: Run tests
@@ -178,7 +190,9 @@ jobs:
           version: 0.8
 
       - name: Run tests with test coverage
-        run: earthly --allow-privileged --strict +test --SAVE_REPORT=yes
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --allow-privileged --org jdno --sat xsmall-amd64-1 --strict +test --SAVE_REPORT=yes
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v5

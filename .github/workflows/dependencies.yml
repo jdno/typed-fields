@@ -4,6 +4,7 @@ name: Dependencies
 "on":
   push:
     paths:
+      - .github/workflows/dependencies.yml
       - Earthfile
   schedule:
     # Run schedule every day at 4:44 UTC
@@ -26,4 +27,6 @@ jobs:
           version: 0.8
 
       - name: Run tests with latest dependency versions
-        run: earthly --ci +deps-latest
+        env:
+          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +deps-latest
