@@ -100,26 +100,22 @@ test:
     FROM +os
 
     # Install cargo-binstall
-    RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+    RUN cargo install cargo-binstall
 
     # Install cargo-tarpaulin
     RUN cargo binstall cargo-tarpaulin
 
     # Copy the source code in a cache-friendly way
-    COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
-    COPY crates ./crates
+    COPY Cargo.toml Cargo.lock ./
+    COPY --dir src tests ./
 
     # Run the tests and measure the code coverage
-    WITH DOCKER
-        RUN cargo tarpaulin \
-            --all-features \
-            --all-targets \
-            --engine llvm \
-            --exclude typed-fields-derive \
-            --out Xml \
-            --timeout 120 \
-            --verbose
-    END
+    # --privileged is required by tarpaulin to set flags on the binary
+    RUN --privileged cargo tarpaulin \
+        --all-features \
+        --all-targets \
+        --out Xml \
+        --verbose
 
     # Save the coverage report
     IF [ "$SAVE_REPORT" != "" ]
