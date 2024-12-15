@@ -26,7 +26,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +json-format
+        run: earthly --ci +json-format
 
   markdown-format:
     name: Format Markdown
@@ -45,7 +45,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +markdown-format
+        run: earthly --ci +markdown-format
 
   markdown-lint:
     name: Lint Markdown
@@ -64,7 +64,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +markdown-lint
+        run: earthly --ci +markdown-lint
 
   rust-deps-latest:
     name: Test latest dependencies
@@ -83,7 +83,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-2 +rust-deps-latest
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +rust-deps-latest
 
   rust-deps-minimal:
     name: Test minimal dependencies
@@ -102,7 +102,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-2 +rust-deps-minimal
+        run: earthly --ci --org jdno --sat xsmall-amd64-1 +rust-deps-minimal
 
   rust-doc:
     name: Compile documentation
@@ -121,7 +121,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-3 +rust-doc
+        run: earthly --ci --org jdno --sat xsmall-amd64-2 +rust-doc
 
   rust-features:
     name: Test features
@@ -159,7 +159,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +rust-format
+        run: earthly --ci +rust-format
 
   rust-lint:
     name: Lint Rust
@@ -178,7 +178,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +rust-lint
+        run: earthly --ci --org jdno --sat xsmall-amd64-2 +rust-lint
 
   rust-msrv:
     name: Check MSRV
@@ -247,7 +247,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +yaml-format
+        run: earthly --ci +yaml-format
 
   yaml-lint:
     name: Lint YAML
@@ -266,4 +266,4 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +yaml-lint
+        run: earthly --ci +yaml-lint
