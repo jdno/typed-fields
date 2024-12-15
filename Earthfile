@@ -65,6 +65,12 @@ rust-sources:
     COPY Cargo.toml Cargo.lock ./
     COPY --dir src tests ./
 
+rust-build:
+    FROM +rust-sources
+
+    # Build the project
+    RUN cargo build --all-features --locked
+
 rust-deps-latest:
     FROM +rust-sources
 
@@ -99,7 +105,7 @@ rust-doc:
     SAVE ARTIFACT target/doc AS LOCAL target/doc
 
 rust-features:
-    FROM +rust-sources
+    FROM +rust-build
 
     # Install cargo-hack
     RUN cargo install cargo-hack
@@ -114,7 +120,7 @@ rust-format:
     RUN cargo fmt --all --check
 
 rust-lint:
-    FROM +rust-sources
+    FROM +rust-build
 
     # Check the code for linting errors
     RUN cargo clippy --all-targets --all-features -- -D warnings
@@ -132,7 +138,7 @@ rust-msrv:
     RUN cargo +$MSRV check --all-features --all-targets
 
 rust-publish:
-    FROM +rust-sources
+    FROM +rust-build
 
     # Publish the crate to crates.io
     RUN --secret CARGO_REGISTRY_TOKEN cargo publish -v --all-features --token "$CARGO_REGISTRY_TOKEN"
@@ -141,7 +147,7 @@ rust-test:
     # Optionally save the report to the local filesystem
     ARG SAVE_REPORT=""
 
-    FROM +rust-container
+    FROM +rust-build
 
     # Install cargo-binstall
     RUN cargo install cargo-binstall
@@ -149,16 +155,13 @@ rust-test:
     # Install cargo-tarpaulin
     RUN cargo binstall cargo-tarpaulin
 
-    # Copy the source code in a cache-friendly way
-    COPY Cargo.toml Cargo.lock ./
-    COPY --dir src tests ./
-
     # Run the tests and measure the code coverage
     # --privileged is required by tarpaulin to set flags on the binary
     RUN --privileged cargo tarpaulin \
         --all-features \
         --all-targets \
         --out Xml \
+        --skip-clean \
         --verbose
 
     # Save the coverage report
