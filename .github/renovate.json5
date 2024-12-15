@@ -1,0 +1,24 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:base"],
+
+  assignees: ["jdno"],
+  reviewers: ["jdno"],
+
+  automerge: true,
+  dependencyDashboard: false,
+  semanticCommits: "disabled",
+  "pre-commit": {
+    enabled: true,
+  },
+
+  customManagers: [
+    {
+      customType: "regex",
+      fileMatch: ["^Earthfile$"],
+      matchStrings: ["rust:(?<currentValue>.*?)(-[\\w]+)?$"],
+      depNameTemplate: "rust",
+      datasourceTemplate: "docker",
+    },
+  ],
+}
