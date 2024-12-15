@@ -23,7 +23,7 @@ json-format:
     FROM +prettier-container
 
     # Check the JSON formatting
-    RUN prettier --check **/*.json
+    RUN prettier --check **/*.{json,json5}
 
 markdown-format:
     FROM +prettier-container
