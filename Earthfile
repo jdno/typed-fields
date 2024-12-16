@@ -4,6 +4,8 @@ PROJECT jdno/typed-fields
 FROM rust:1.82.0-slim
 WORKDIR /typed-fields
 
+IMPORT github.com/earthly/lib/rust
+
 all:
     BUILD +json-format
     BUILD +markdown-format
@@ -58,18 +60,21 @@ rust-container:
     # Install clippy and rustfmt
     RUN rustup component add clippy rustfmt
 
+    # Initialize the Rust toolchain
+    DO rust+INIT --keep_fingerprints=true
+
 rust-sources:
     FROM +rust-container
 
     # Copy the source code in a cache-friendly way
-    COPY Cargo.toml Cargo.lock ./
-    COPY --dir src tests ./
+    COPY --keep-ts Cargo.toml Cargo.lock ./
+    COPY --keep-ts --dir src tests ./
 
 rust-build:
     FROM +rust-sources
 
     # Build the project
-    RUN cargo build --all-features --locked
+    DO rust+CARGO --args="build --all-features --locked"
 
 rust-deps-latest:
     FROM +rust-sources
@@ -78,10 +83,10 @@ rust-deps-latest:
     RUN rustup default beta
 
     # Update the dependencies to the latest versions
-    RUN cargo update
+    DO rust+CARGO --args="update"
 
     # Run tests to ensure the latest versions are compatible
-    RUN RUSTFLAGS="-D deprecated" cargo test --all-features --all-targets --locked
+    DO rust+CARGO --args="test --all-features --all-targets --locked"
 
 rust-deps-minimal:
     FROM +rust-sources
@@ -90,16 +95,16 @@ rust-deps-minimal:
     RUN rustup default nightly
 
     # Set minimal versions for dependencies
-    RUN cargo update -Z direct-minimal-versions
+    DO rust+CARGO --args="update -Z direct-minimal-versions"
 
     # Run tests to ensure the minimal versions are compatible
-    RUN cargo test --all-features --all-targets --locked
+    DO rust+CARGO --args="test --all-features --all-targets --locked"
 
 rust-doc:
     FROM +rust-sources
 
     # Generate the documentation
-    RUN cargo doc --all-features --no-deps
+    DO rust+CARGO --args="doc --all-features --no-deps" --output="doc/.*"
 
     # Save the documentation to the local filesystem
     SAVE ARTIFACT target/doc AS LOCAL target/doc
@@ -108,24 +113,26 @@ rust-features:
     FROM +rust-build
 
     # Install cargo-hack
-    RUN cargo install cargo-hack
+    DO rust+CARGO --args="install cargo-hack"
 
     # Test combinations of features
-    RUN cargo hack --feature-powerset check --lib --tests
+    DO rust+CARGO --args="hack --feature-powerset check --lib --tests"
 
 rust-format:
     FROM +rust-sources
 
     # Check the code formatting
-    RUN cargo fmt --all --check
+    DO rust+CARGO --args="fmt --all --check"
 
 rust-lint:
     FROM +rust-build
 
     # Check the code for linting errors
-    RUN cargo clippy --all-targets --all-features -- -D warnings
+    DO rust+CARGO --args="clippy --all-targets --all-features -- -D warnings"
 
 rust-msrv:
+    # The Earthly Rust library requires a minimum version of 1.70.0, so we
+    # cannot use it for this check.
     ARG MSRV="1.61.0"
 
     FROM "rust:$MSRV-slim"
@@ -141,7 +148,7 @@ rust-publish:
     FROM +rust-build
 
     # Publish the crate to crates.io
-    RUN --secret CARGO_REGISTRY_TOKEN cargo publish -v --all-features --token "$CARGO_REGISTRY_TOKEN"
+    DO rust+CARGO --secret CARGO_REGISTRY_TOKEN --args="publish -v --all-features --token $CARGO_REGISTRY_TOKEN"
 
 rust-test:
     # Optionally save the report to the local filesystem
@@ -150,19 +157,14 @@ rust-test:
     FROM +rust-build
 
     # Install cargo-binstall
-    RUN cargo install cargo-binstall
+    DO rust+CARGO --args="install cargo-binstall"
 
     # Install cargo-tarpaulin
-    RUN cargo binstall cargo-tarpaulin
+    DO rust+CARGO --args="binstall cargo-tarpaulin"
 
     # Run the tests and measure the code coverage
     # --privileged is required by tarpaulin to set flags on the binary
-    RUN --privileged cargo tarpaulin \
-        --all-features \
-        --all-targets \
-        --out Xml \
-        --skip-clean \
-        --verbose
+    DO --allow-privileged rust+CARGO --args="tarpaulin --all-features --all-targets --out Xml --skip-clean --verbose" --output="../cobertura.xml"
 
     # Save the coverage report
     IF [ "$SAVE_REPORT" != "" ]
