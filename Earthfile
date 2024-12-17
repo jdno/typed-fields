@@ -126,7 +126,7 @@ rust-lint:
     RUN cargo clippy --all-targets --all-features -- -D warnings
 
 rust-msrv:
-    ARG MSRV="1.61.0"
+    ARG MSRV="1.71.1"
 
     FROM "rust:$MSRV-slim"
 
