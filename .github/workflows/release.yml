@@ -24,4 +24,4 @@ jobs:
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_TOKEN }}
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +rust-publish
+        run: earthly --ci --secret CARGO_REGISTRY_TOKEN +rust-publish
