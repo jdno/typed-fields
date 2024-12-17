@@ -83,7 +83,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +rust-deps-latest
+        run: earthly --ci +rust-deps-latest
 
   rust-deps-minimal:
     name: Test minimal dependencies
@@ -102,7 +102,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-1 +rust-deps-minimal
+        run: earthly --ci +rust-deps-minimal
 
   rust-doc:
     name: Compile documentation
@@ -121,7 +121,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-2 +rust-doc
+        run: earthly --ci +rust-doc
 
   rust-features:
     name: Test features
@@ -140,7 +140,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-3 +rust-deps-latest
+        run: earthly --ci +rust-deps-latest
 
   rust-format:
     name: Format Rust
@@ -178,7 +178,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-2 +rust-lint
+        run: earthly --ci +rust-lint
 
   rust-msrv:
     name: Check MSRV
@@ -197,7 +197,7 @@ jobs:
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci --org jdno --sat xsmall-amd64-3 +rust-msrv
+        run: earthly --ci +rust-msrv
 
   rust-test:
     name: Run tests
@@ -216,7 +216,7 @@ jobs:
       - name: Run tests with test coverage
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --allow-privileged --org jdno --sat small-amd64-1 --strict +rust-test --SAVE_REPORT=yes
+        run: earthly --allow-privileged --strict +rust-test --SAVE_REPORT=yes
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v5
