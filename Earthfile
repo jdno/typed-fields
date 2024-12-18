@@ -140,6 +140,9 @@ rust-msrv:
 rust-publish:
     FROM +rust-build
 
+    # Copy additional files for the release into the container
+    COPY README.md .
+
     # Publish the crate to crates.io
     RUN --secret CARGO_REGISTRY_TOKEN cargo publish -v --all-features --token "$CARGO_REGISTRY_TOKEN"
 
