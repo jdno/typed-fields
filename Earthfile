@@ -19,6 +19,19 @@ all:
     BUILD +yaml-format
     BUILD +yaml-lint
 
+COPY_SOURCES:
+    FUNCTION
+
+    # Copy the source code into the container
+    COPY . .
+
+COPY_RUST_SOURCES:
+    FUNCTION
+
+    # Copy the source code in a cache-friendly way
+    COPY --keep-ts Cargo.toml Cargo.lock ./
+    COPY --keep-ts --dir src tests ./
+
 json-format:
     FROM +prettier-container
 
@@ -39,7 +52,7 @@ markdown-lint:
     RUN npm install -g markdownlint-cli
 
     # Copy the source code into the container
-    COPY . .
+    DO +COPY_SOURCES
 
     # Check the Markdown for linting errors
     RUN markdownlint **/*.md
@@ -52,7 +65,7 @@ prettier-container:
     RUN npm install -g prettier
 
     # Copy the source code into the container
-    COPY . .
+    DO +COPY_SOURCES
 
 rust-container:
     # Install clippy and rustfmt
@@ -62,8 +75,7 @@ rust-sources:
     FROM +rust-container
 
     # Copy the source code in a cache-friendly way
-    COPY Cargo.toml Cargo.lock ./
-    COPY --dir src tests ./
+    DO +COPY_RUST_SOURCES
 
 rust-build:
     FROM +rust-sources
@@ -131,8 +143,7 @@ rust-msrv:
     FROM "rust:$MSRV-slim"
 
     # Copy the source code in a cache-friendly way
-    COPY Cargo.toml Cargo.lock ./
-    COPY --dir src tests ./
+    DO +COPY_RUST_SOURCES
 
     # Check that the project compiles with the MSRV
     RUN cargo +$MSRV check --all-features --all-targets
@@ -180,7 +191,7 @@ yaml-lint:
     WORKDIR /typed-fields
 
     # Copy the source code into the container
-    COPY . .
+    DO +COPY_SOURCES
 
     # Check the YAML files for linting errors
     RUN yamllint .
