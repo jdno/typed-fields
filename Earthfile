@@ -74,6 +74,15 @@ rust-container:
     # Install system-level dependencies
     RUN apt update && apt upgrade -y && apt install -y curl libssl-dev pkg-config
 
+rust-tarpaulin-container:
+    FROM +rust-container
+
+    # Install cargo-tarpaulin
+    RUN cargo install cargo-tarpaulin
+
+    # Cache the container
+    SAVE IMAGE --cache-hint
+
 rust-sources:
     FROM +rust-container
 
@@ -164,10 +173,10 @@ rust-test:
     # Optionally save the report to the local filesystem
     ARG SAVE_REPORT=""
 
-    FROM +rust-build
+    FROM +rust-tarpaulin-container
 
-    # Install cargo-tarpaulin
-    RUN cargo install cargo-tarpaulin
+    # Copy the source code in a cache-friendly way
+    DO +COPY_RUST_SOURCES
 
     # Run the tests and measure the code coverage
     # --privileged is required by tarpaulin to set flags on the binary
