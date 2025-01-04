@@ -71,11 +71,11 @@ rust-container:
     # Install clippy and rustfmt
     RUN rustup component add clippy rustfmt
 
-    # Install system-level dependencies
-    RUN apt update && apt upgrade -y && apt install -y curl libssl-dev pkg-config
-
 rust-tarpaulin-container:
     FROM +rust-container
+
+    # Install system-level dependencies
+    RUN apt update && apt upgrade -y && apt install -y curl libssl-dev pkg-config
 
     # Install cargo-tarpaulin
     RUN cargo install cargo-tarpaulin
