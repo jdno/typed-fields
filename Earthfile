@@ -71,6 +71,9 @@ rust-container:
     # Install clippy and rustfmt
     RUN rustup component add clippy rustfmt
 
+    # Install system-level dependencies
+    RUN apt update && apt upgrade -y && apt install -y curl libssl-dev pkg-config
+
 rust-sources:
     FROM +rust-container
 
@@ -163,11 +166,8 @@ rust-test:
 
     FROM +rust-build
 
-    # Install cargo-binstall
-    RUN cargo install cargo-binstall
-
     # Install cargo-tarpaulin
-    RUN cargo binstall cargo-tarpaulin
+    RUN cargo install cargo-tarpaulin
 
     # Run the tests and measure the code coverage
     # --privileged is required by tarpaulin to set flags on the binary
