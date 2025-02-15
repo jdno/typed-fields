@@ -3,7 +3,10 @@
 
 use typed_fields::name;
 
-name!(TestName);
+name!(
+    /// A doc comment for the test name
+    TestName
+);
 
 #[test]
 fn get() {

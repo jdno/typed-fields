@@ -28,6 +28,9 @@
 #![warn(missing_docs)]
 
 use proc_macro::TokenStream;
+use proc_macro2::Ident;
+use syn::parse::{Parse, ParseStream};
+use syn::Attribute;
 
 mod name;
 mod number;
@@ -194,4 +197,35 @@ pub fn url(input: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn uuid(input: TokenStream) -> TokenStream {
     uuid::uuid_impl(input)
+}
+
+/// The token stream of each macro invocation
+///
+/// This struct represents the token stream of each macro invocation. Consider
+/// the following example:
+///
+/// ```rust
+/// use typed_fields::name;
+///
+/// name!(
+///     /// This is a doc comment
+///     TestName
+/// )
+/// ```
+///
+/// In this example, `attrs` will contain the doc comment and `ident` will
+/// contain the identifier `TestName`. More attributes can be added by the user,
+/// e.g. additional derives.
+struct Input {
+    attrs: Vec<Attribute>,
+    ident: Ident,
+}
+
+impl Parse for Input {
+    fn parse(input: ParseStream) -> syn::Result<Self> {
+        let attrs = input.call(Attribute::parse_outer)?;
+        let ident: Ident = input.parse()?;
+
+        Ok(Self { attrs, ident })
+    }
 }

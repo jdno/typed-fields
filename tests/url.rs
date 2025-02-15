@@ -11,7 +11,10 @@ use url::Url;
 use typed_fields::url;
 
 #[cfg(feature = "url")]
-url!(TestUrl);
+url!(
+    /// A doc comment for the test URL
+    TestUrl
+);
 
 #[cfg(feature = "url")]
 #[test]
