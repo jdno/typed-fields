@@ -5,7 +5,10 @@
 use typed_fields::secret;
 
 #[cfg(feature = "secret")]
-secret!(TestSecret);
+secret!(
+    /// A doc comment for the test secret
+    TestSecret
+);
 
 #[cfg(feature = "secret")]
 #[test]

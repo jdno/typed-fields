@@ -1,14 +1,16 @@
 use proc_macro::TokenStream;
 
-use proc_macro2::Ident;
 use quote::quote;
 use syn::parse_macro_input;
 
+use crate::Input;
+
 pub fn ulid_impl(input: TokenStream) -> TokenStream {
-    let ident = parse_macro_input!(input as Ident);
+    let Input { attrs, ident } = parse_macro_input!(input as Input);
     let derives = derives();
 
     let newtype = quote! {
+        #(#attrs)*
         #derives
         pub struct #ident(ulid::Ulid);
 

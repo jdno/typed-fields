@@ -9,7 +9,10 @@ use typed_fields::ulid;
 use ulid::Ulid;
 
 #[cfg(feature = "ulid")]
-ulid!(TestUlid);
+ulid!(
+    /// A doc comment for the test ULID
+    TestUlid
+);
 
 #[cfg(feature = "ulid")]
 #[test]

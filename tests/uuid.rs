@@ -10,7 +10,10 @@ use typed_fields::uuid;
 use uuid::uuid as uuid_v4;
 
 #[cfg(feature = "uuid")]
-uuid!(TestUuid);
+uuid!(
+    /// A doc comment for the test UUID
+    TestUuid
+);
 
 #[cfg(feature = "uuid")]
 #[test]

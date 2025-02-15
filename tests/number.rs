@@ -3,7 +3,10 @@
 
 use typed_fields::number;
 
-number!(TestId);
+number!(
+    /// A doc comment for the test id
+    TestId
+);
 
 #[test]
 fn get() {
