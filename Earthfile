@@ -1,7 +1,7 @@
 VERSION 0.8
 PROJECT jdno/typed-fields
 
-FROM rust:1.82.0-slim
+FROM rust:1.84.1-slim
 WORKDIR /typed-fields
 
 all:
