@@ -12,13 +12,7 @@
     enabled: true,
   },
 
-  customManagers: [
-    {
-      customType: "regex",
-      fileMatch: ["^Earthfile$"],
-      matchStrings: ["rust:(?<currentValue>.*?)(-[\\w]+)?$"],
-      depNameTemplate: "rust",
-      datasourceTemplate: "docker",
-    },
-  ],
+  dockerfile: {
+    fileMatch: ["^Earthfile$"],
+  },
 }
