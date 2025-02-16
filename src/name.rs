@@ -15,10 +15,29 @@ pub fn name_impl(input: TokenStream) -> TokenStream {
         pub struct #ident(String);
 
         impl #ident {
+            /// Create a new `#ident`
+            ///
+            /// This method creates a new `#ident` from anything that implements
+            /// the `Into<String>` trait. This includes `&str`, `String`, and
+            /// other types that can be converted into a `String`.
+            ///
+            /// # Example
+            ///
+            /// ```
+            /// use typed_fields::name;
+            ///
+            /// name!(Name);
+            ///
+            /// let name = Name::new("name");
+            /// ```
             pub fn new(name: impl Into<String>) -> Self {
                 Self(name.into())
             }
 
+            /// Get the inner value of the `#ident`
+            ///
+            /// This method returns a reference to the inner value of the
+            /// `#ident`.
             pub fn get(&self) -> &str {
                 &self.0
             }

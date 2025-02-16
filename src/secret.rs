@@ -15,10 +15,27 @@ pub fn secret_impl(input: TokenStream) -> TokenStream {
         pub struct #ident(secrecy::SecretString);
 
         impl #ident {
+            /// Create a new `#ident`
+            ///
+            /// This method creates a new `#ident` from a `&str`.
+            ///
+            /// # Example
+            ///
+            /// ```
+            /// use typed_fields::secret;
+            ///
+            /// secret!(Secret);
+            ///
+            /// let secret = Secret::new("secret");
+            /// ```
             pub fn new(secret: &str) -> Self {
                 Self(String::from(secret).into())
             }
 
+            /// Expose the secret's inner value
+            ///
+            /// This method returns a reference to the exposed value of the
+            /// `#ident`.
             pub fn expose(&self) -> &str {
                 use secrecy::ExposeSecret;
                 self.0.expose_secret()
