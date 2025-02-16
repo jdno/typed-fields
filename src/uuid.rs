@@ -15,10 +15,27 @@ pub fn uuid_impl(input: TokenStream) -> TokenStream {
         pub struct #ident(uuid::Uuid);
 
          impl #ident {
+            /// Create a new `#ident`
+            ///
+            /// This method creates a new `#ident` from a `Uuid`.
+            ///
+            /// # Example
+            ///
+            /// ```
+            /// use typed_fields::uuid;
+            ///
+            /// uuid!(MyUuid);
+            ///
+            /// let uuid = MyUuid::new(Uuid::new_v4());
+            /// ```
             pub fn new(uuid: uuid::Uuid) -> Self {
                 Self(uuid)
             }
 
+            /// Get the inner value of the `#ident`
+            ///
+            /// This method returns a reference to the inner value of the
+            /// `#ident`.
             pub fn get(&self) -> &uuid::Uuid {
                 &self.0
             }

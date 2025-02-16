@@ -15,10 +15,28 @@ pub fn url_impl(input: TokenStream) -> TokenStream {
         pub struct #ident(url::Url);
 
          impl #ident {
+            /// Create a new `#ident`
+            ///
+            /// This method creates a new `#ident` from a `URL`.
+            ///
+            /// # Example
+            ///
+            /// ```
+            /// use typed_fields::url;
+            /// use url::Url;
+            ///
+            /// url!(MyUrl);
+            ///
+            /// let url = MyUrl::new(Url::parse("https://example.com").unwrap());
+            /// ```
             pub fn new(url: url::Url) -> Self {
                 Self(url)
             }
 
+            /// Get the inner value of the `#ident`
+            ///
+            /// This method returns a reference to the inner value of the
+            /// `#ident`.
             pub fn get(&self) -> &url::Url {
                 &self.0
             }

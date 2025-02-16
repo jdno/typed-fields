@@ -15,10 +15,26 @@ pub fn number_impl(input: TokenStream) -> TokenStream {
         pub struct #ident(i64);
 
         impl #ident {
+            /// Create a new `#ident`
+            ///
+            /// This method creates a new `#ident` from an `i64`.
+            ///
+            /// # Example
+            ///
+            /// ```
+            /// use typed_fields::number;
+            ///
+            /// number!(Number);
+            ///
+            /// let number = Number::new(0);
+            /// ```
             pub fn new(id: i64) -> Self {
                 Self(id)
             }
 
+            /// Get the inner value of the `#ident`
+            ///
+            /// This method returns a copy of the inner value of the `#ident`.
             pub fn get(&self) -> i64 {
                 self.0
             }
