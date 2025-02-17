@@ -1,9 +1,8 @@
 # pre-commit configuration
 #
-# We use pre-commit to enforce a consistency in our repositories. By default,
-# YAML and Markdown files get linted, and Prettier runs to auto-format the file
-# types it supports. Depending on the project, other rules can be added here to
-# support the needs of the project.
+# We use pre-commit to enforce a consistent style in our repositories. The hooks
+# check for a few common issues with files, and then execute the `+pre-commit`
+# target in Earthly to run the same checks as the CI pipeline.
 #
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
@@ -13,29 +12,14 @@ repos:
     rev: v5.0.0
     hooks:
       - id: check-added-large-files
-        args: ["--maxkb=1024"]
       - id: check-case-conflict
       - id: end-of-file-fixer
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
-  - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.44.0
+  - repo: https://github.com/hongkongkiwi/earthly-precommit
+    rev: v0.0.5
     hooks:
-      - id: markdownlint
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
-    hooks:
-      - id: yamllint
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
-    hooks:
-      - id: prettier
-        args: ["--cache-location=.prettiercache"]
-  - repo: https://github.com/doublify/pre-commit-rust
-    rev: v1.0
-    hooks:
-      - id: clippy
-        args: [--all-features, --all-targets, --, -D, warnings]
-      - id: cargo-check
-      - id: fmt
-        args: [--all, --]
+      - id: earthly-target
+        name: run Earthly checks
+        args: ["./Earthfile", "+pre-commit", "--FIX=true"]
+        files: .*

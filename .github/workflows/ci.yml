@@ -2,20 +2,16 @@
 name: Continuous Integration
 
 "on":
-  push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch:
 
-permissions:
-  packages: write
-  contents: read
-
 jobs:
-  json-format:
-    name: Format JSON
+  targets:
+    name: Enumerate Earthly targets
     runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.export-targets.outputs.targets }}
 
     steps:
       - name: Checkout code
@@ -27,185 +23,24 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: 0.8
 
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +json-format
+      - name: Export targets
+        id: export-targets
+        run: echo "targets=$(earthly ls | jq -cnR '[inputs | sub("\\+"; "") | select(startswith("check-") or startswith("format-") or startswith("lint-") or startswith("test-"))]')" >> "$GITHUB_OUTPUT"
 
-  markdown-format:
-    name: Format Markdown
+  checks:
+    name: ${{ matrix.target }}
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    permissions:
+      packages: write
+      contents: read
 
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
+    needs: targets
 
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +markdown-format
-
-  markdown-lint:
-    name: Lint Markdown
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +markdown-lint
-
-  rust-deps-latest:
-    name: Test latest dependencies
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +rust-deps-latest
-
-  rust-deps-minimal:
-    name: Test minimal dependencies
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +rust-deps-minimal
-
-  rust-doc:
-    name: Compile documentation
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +rust-doc
-
-  rust-features:
-    name: Test features
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +rust-deps-latest
-
-  rust-format:
-    name: Format Rust
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +rust-format
-
-  rust-lint:
-    name: Lint Rust
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +rust-lint
-
-  rust-msrv:
-    name: Check MSRV
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +rust-msrv
-
-  rust-test:
-    name: Run tests
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJson(needs.targets.outputs.matrix) }}
 
     steps:
       - name: Checkout code
@@ -224,57 +59,18 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: 0.8
 
-      - name: Run tests with test coverage
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --allow-privileged --push --remote-cache=ghcr.io/jdno/typed-fields:cache-run-tests --strict +rust-test --SAVE_REPORT=yes
-
-      - name: Upload to codecov.io
-        uses: codecov/codecov-action@v5
-        continue-on-error: true
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v4
-        with:
-          name: code-coverage-report
-          path: cobertura.xml
-
-  yaml-format:
-    name: Format YAML
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
       - name: Run check with Earthly
         env:
           EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +yaml-format
+        run: earthly --allow-privileged --ci --push --remote-cache=ghcr.io/jdno/typed-fields-earthly-cache:${{ matrix.target }} +${{ matrix.target }}
 
-  yaml-lint:
-    name: Lint YAML
+  success:
+    name: All checks succeeded
     runs-on: ubuntu-latest
 
+    needs: checks
+    if: always()
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
-
-      - name: Run check with Earthly
-        env:
-          EARTHLY_TOKEN: ${{ secrets.EARTHLY_TOKEN }}
-        run: earthly --ci +yaml-lint
+      - name: Check if all checks succeeded
+        run: jq --exit-status 'all(.result == "success")' <<< '${{ toJson(needs) }}'
