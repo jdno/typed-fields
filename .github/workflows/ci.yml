@@ -25,7 +25,7 @@ jobs:
 
       - name: Export targets
         id: export-targets
-        run: echo "targets=$(earthly ls | jq -cnR '[inputs | sub("\\+"; "") | select(startswith("check") or startswith("format") or startswith("lint") or startswith("test"))]')" >> "$GITHUB_OUTPUT"
+        run: echo "targets=$(earthly ls | jq -cnR '[inputs | sub("\\+"; "") | select(startswith("check-") or startswith("format-") or startswith("lint-") or startswith("test-"))]')" >> "$GITHUB_OUTPUT"
 
   checks:
     name: Check
