@@ -19,11 +19,11 @@ all-features = true
 [features]
 secret = ["dep:secrecy"]
 serde = [
-    "dep:serde",
-    "secrecy?/serde",
-    "ulid?/serde",
-    "url?/serde",
-    "uuid?/serde",
+  "dep:serde",
+  "secrecy?/serde",
+  "ulid?/serde",
+  "url?/serde",
+  "uuid?/serde",
 ]
 ulid = ["dep:ulid"]
 url = ["dep:url"]
