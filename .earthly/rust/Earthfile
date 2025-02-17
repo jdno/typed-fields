@@ -89,6 +89,9 @@ MSRV:
 
     FROM "rust:$MSRV-slim"
 
+    # Initialize Rust
+    DO rust+INIT --keep_fingerprints=true
+
     # Copy the source code in a cache-friendly way
     DO +COPY_RUST_SOURCES
 
