@@ -28,7 +28,7 @@ jobs:
         run: echo "targets=$(earthly ls | jq -cnR '[inputs | sub("\\+"; "") | select(startswith("check-") or startswith("format-") or startswith("lint-") or startswith("test-"))]')" >> "$GITHUB_OUTPUT"
 
   checks:
-    name: Check
+    name: ${{ matrix.target }}
     runs-on: ubuntu-latest
 
     permissions:
