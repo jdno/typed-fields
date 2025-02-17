@@ -44,7 +44,7 @@ DOCS:
     DO +SOURCES
 
     # Generate the documentation
-    DO rust+CARGO --args="doc --all-features --no-deps"
+    DO rust+CARGO --args="doc --all-features --no-deps" --output="doc/.+"
 
     # Save the documentation to the local filesystem
     SAVE ARTIFACT target/doc AS LOCAL target/doc
