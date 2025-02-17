@@ -1,6 +1,10 @@
 VERSION 0.8
 PROJECT jdno/typed-fields
 
+# This project's continuous integration pipeline executes all Earthly targets
+# that start with the prefixes `check-`, `format-`, `lint-`, and `test-`. Fixing
+# formatting issues is disabled to prevent parallely running targets from
+# overwriting each other's changes.
 checks:
     BUILD +check-docs
     BUILD +check-features
