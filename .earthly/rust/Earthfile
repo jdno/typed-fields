@@ -115,7 +115,7 @@ TEST:
     # Optionally save the report to the local filesystem
     ARG SAVE_REPORT=""
 
-    FROM +tarpaulin-container
+    DO +TARPAULIN_CONTAINER
 
     # Copy the source code in a cache-friendly way
     DO +COPY_RUST_SOURCES
