@@ -107,7 +107,7 @@ PUBLISH:
     COPY README.md .
 
     # Publish the crate to crates.io
-    DO rust+CARGO --secret CARGO_REGISTRY_TOKEN --args="publish -v --all-features --token $CARGO_REGISTRY_TOKEN"
+    RUN --secret CARGO_REGISTRY_TOKEN cargo publish -v --all-features --token $CARGO_REGISTRY_TOKEN
 
 TEST:
     FUNCTION
