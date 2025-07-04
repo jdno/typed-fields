@@ -1,6 +1,6 @@
 [package]
 name = "typed-fields"
-version = "0.4.2"
+version = "0.4.3"
 edition = "2021"
 
 description = "A collection of macros that generate newtypes"
