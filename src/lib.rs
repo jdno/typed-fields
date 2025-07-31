@@ -210,7 +210,7 @@ pub fn uuid(input: TokenStream) -> TokenStream {
 /// name!(
 ///     /// This is a doc comment
 ///     TestName
-/// )
+/// );
 /// ```
 ///
 /// In this example, `attrs` will contain the doc comment and `ident` will
