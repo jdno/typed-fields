@@ -26,8 +26,7 @@ jobs:
       - name: Install Flox
         uses: flox/install-flox-action@v2
 
-      - name: Activate Flox environment
-        run: flox activate
-
       - name: Run tests with latest dependency versions
-        run: just check-latest-deps
+        uses: flox/activate-action@v1
+        with:
+          command: just check-latest-deps
