@@ -32,6 +32,15 @@ clang.systems = ["aarch64-darwin", "x86_64-darwin"]
 gcc.pkg-path = "gcc"
 gcc.systems = ["aarch64-linux", "x86_64-linux"]
 
+# Local development tools
+cargo-hack.pkg-path = "cargo-hack"
+git.pkg-path = "git"
+just.pkg-path = "just"
+markdownlint-cli.pkg-path = "markdownlint-cli"
+prettier.pkg-path = "prettier"
+taplo.pkg-path = "taplo"
+yamllint.pkg-path = "yamllint"
+
 [vars]
 
 [hook]
