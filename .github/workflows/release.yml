@@ -19,17 +19,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install earthly
-        uses: earthly/actions-setup@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: 0.8
+      - name: Install Just
+        uses: taiki-e/install-action@just
 
       - name: Authenticate with crates.io
         id: auth
         uses: rust-lang/crates-io-auth-action@v1
 
-      - name: Publish with Earthly
+      - name: Publish crate
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
-        run: earthly --ci --push --remote-cache=ghcr.io/jdno/typed-fields-earthly-cache:publish-crate --secret CARGO_REGISTRY_TOKEN  +publish-crate
+        run: just publish
