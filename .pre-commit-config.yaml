@@ -18,9 +18,9 @@ repos:
         args: [--markdown-linebreak-ext=md]
   - repo: local
     hooks:
-      - id: prettier
-        name: prettier
-        entry: prettier
-        files: .*
-        args: ["--write", "--ignore-unknown"]
+      - id: just
+        name: just
+        entry: just
+        args: ["pre-commit"]
         language: system
+        pass_filenames: false

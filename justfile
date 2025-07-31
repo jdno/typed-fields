@@ -3,7 +3,14 @@ default:
     @just --list
 
 # Run a subset of checks as pre-commit hooks
-pre-commit: (prettier "true") (format-toml "true") (format-rust "true") (lint-markdown) (lint-rust) (lint-yaml)
+pre-commit:
+    #!/usr/bin/env -S parallel --shebang --ungroup --jobs {{ num_cpus() }}
+    just prettier true
+    just format-toml true
+    just format-rust true
+    just lint-markdown
+    just lint-rust
+    just lint-yaml
 
 # Build the documentation
 build-docs:

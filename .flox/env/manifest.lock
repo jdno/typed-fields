@@ -44,6 +44,9 @@
       "markdownlint-cli": {
         "pkg-path": "markdownlint-cli"
       },
+      "parallel": {
+        "pkg-path": "parallel"
+      },
       "prettier": {
         "pkg-path": "prettier"
       },
@@ -1438,6 +1441,134 @@
       ],
       "outputs": {
         "out": "/nix/store/aasvrzlp03flhmmrmbayfwxzcbx9mvza-markdownlint-cli-0.45.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "parallel",
+      "broken": false,
+      "derivation": "/nix/store/jnhmf1kqj6c6yhdskk65gzd1bar8l5y4-parallel-20250722.drv",
+      "description": "Shell tool for executing jobs in parallel",
+      "install_id": "parallel",
+      "license": "GPL-3.0-or-later",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=dc9637876d0dcc8c9e5e22986b857632effeb727",
+      "name": "parallel-20250722",
+      "pname": "parallel",
+      "rev": "dc9637876d0dcc8c9e5e22986b857632effeb727",
+      "rev_count": 836203,
+      "rev_date": "2025-07-28T09:26:29Z",
+      "scrape_date": "2025-07-30T00:28:09.182234Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "20250722",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "doc": "/nix/store/kkxyi68y3vc35d72m486hb71x5j1x2pz-parallel-20250722-doc",
+        "man": "/nix/store/80f992l61gm4iayk4qmvhn4kfq847676-parallel-20250722-man",
+        "out": "/nix/store/0wpqlcdg61hl2i9smd2ig4ggfmlr9xcf-parallel-20250722"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "parallel",
+      "broken": false,
+      "derivation": "/nix/store/nx1mlak1a5pslnay94zqcag78vcwig6a-parallel-20250722.drv",
+      "description": "Shell tool for executing jobs in parallel",
+      "install_id": "parallel",
+      "license": "GPL-3.0-or-later",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=dc9637876d0dcc8c9e5e22986b857632effeb727",
+      "name": "parallel-20250722",
+      "pname": "parallel",
+      "rev": "dc9637876d0dcc8c9e5e22986b857632effeb727",
+      "rev_count": 836203,
+      "rev_date": "2025-07-28T09:26:29Z",
+      "scrape_date": "2025-07-30T00:47:53.030084Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "20250722",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "doc": "/nix/store/9h0xcfv0sdc2pzd0yqw91qsk59y5lwaj-parallel-20250722-doc",
+        "man": "/nix/store/a6fm62w0rymilwlix7i47gs6y2ypf1lq-parallel-20250722-man",
+        "out": "/nix/store/5kpqj8i2qncfj42dgvnrrbi7pbd1zzg4-parallel-20250722"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "parallel",
+      "broken": false,
+      "derivation": "/nix/store/dbqxjym59lk0y6ghz8mwqphjmmr87laq-parallel-20250722.drv",
+      "description": "Shell tool for executing jobs in parallel",
+      "install_id": "parallel",
+      "license": "GPL-3.0-or-later",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=dc9637876d0dcc8c9e5e22986b857632effeb727",
+      "name": "parallel-20250722",
+      "pname": "parallel",
+      "rev": "dc9637876d0dcc8c9e5e22986b857632effeb727",
+      "rev_count": 836203,
+      "rev_date": "2025-07-28T09:26:29Z",
+      "scrape_date": "2025-07-30T01:07:29.604061Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "20250722",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "doc": "/nix/store/5lm0y7d7lbdpx146hi59bfixlj3xgish-parallel-20250722-doc",
+        "man": "/nix/store/2r3flfcs6v716dv2jn0wmbijfsmbhr68-parallel-20250722-man",
+        "out": "/nix/store/bzy06rm80xqjwh5spcqpzi57ndniy7xs-parallel-20250722"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "parallel",
+      "broken": false,
+      "derivation": "/nix/store/rnjr9kmlncpvb7lc99yv7k0bgp79m8aw-parallel-20250722.drv",
+      "description": "Shell tool for executing jobs in parallel",
+      "install_id": "parallel",
+      "license": "GPL-3.0-or-later",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=dc9637876d0dcc8c9e5e22986b857632effeb727",
+      "name": "parallel-20250722",
+      "pname": "parallel",
+      "rev": "dc9637876d0dcc8c9e5e22986b857632effeb727",
+      "rev_count": 836203,
+      "rev_date": "2025-07-28T09:26:29Z",
+      "scrape_date": "2025-07-30T01:31:34.872812Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "20250722",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "doc": "/nix/store/0803hk29kn4nags4jyfr8nvffc9ks8sl-parallel-20250722-doc",
+        "man": "/nix/store/0k88mxnk984sllw8idrpmys1zdckdsik-parallel-20250722-man",
+        "out": "/nix/store/lphscl6nj3ywcppqza7zsk7j7l6rhfrz-parallel-20250722"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
