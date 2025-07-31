@@ -43,8 +43,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Just
-        uses: taiki-e/install-action@just
+      - name: Install Flox
+        uses: flox/install-flox-action@v2
+
+      - name: Activate Flox environment
+        run: flox activate
 
       - name: Run check with Just
         run: just ${{ matrix.target }}
