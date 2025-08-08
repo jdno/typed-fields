@@ -79,7 +79,6 @@ fn derives() -> proc_macro2::TokenStream {
         #[derive(Clone, Debug)]
     };
 
-    // Do not derive SeaORM value type here; we provide manual impls above
     derives.extend(derive_serde());
 
     derives
