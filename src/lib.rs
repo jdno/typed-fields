@@ -29,8 +29,8 @@
 
 use proc_macro::TokenStream;
 use proc_macro2::Ident;
-use syn::parse::{Parse, ParseStream};
 use syn::Attribute;
+use syn::parse::{Parse, ParseStream};
 
 mod name;
 mod number;
