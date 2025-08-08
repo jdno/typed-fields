@@ -26,7 +26,7 @@ pub fn number_impl(input: TokenStream) -> TokenStream {
             ///
             /// number!(Number);
             ///
-            /// let number = Number::new(0);
+            /// let number = Number::new(42);
             /// ```
             pub fn new(id: i64) -> Self {
                 Self(id)
@@ -61,9 +61,22 @@ fn derives() -> proc_macro2::TokenStream {
         #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
     };
 
+    derives.extend(derive_sea_orm());
     derives.extend(derive_serde());
 
     derives
+}
+
+#[cfg(feature = "sea-orm")]
+fn derive_sea_orm() -> proc_macro2::TokenStream {
+    quote! {
+        #[derive(sea_orm::DeriveValueType)]
+    }
+}
+
+#[cfg(not(feature = "sea-orm"))]
+fn derive_sea_orm() -> proc_macro2::TokenStream {
+    quote! {}
 }
 
 #[cfg(feature = "serde")]

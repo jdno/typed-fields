@@ -18,6 +18,25 @@ fn expose() {
     assert_eq!("test", secret.expose());
 }
 
+#[cfg(all(feature = "secret", feature = "sea-orm"))]
+#[test]
+fn compiles_in_sea_orm_model() {
+    use sea_orm::entity::prelude::*;
+
+    #[derive(Clone, Debug, DeriveEntityModel)]
+    #[sea_orm(table_name = "cake")]
+    pub struct Model {
+        #[sea_orm(primary_key)]
+        id: i32,
+        secret: TestSecret,
+    }
+
+    #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+    pub enum Relation {}
+
+    impl ActiveModelBehavior for ActiveModel {}
+}
+
 #[cfg(all(feature = "secret", feature = "serde"))]
 #[test]
 fn trait_deserialize() {

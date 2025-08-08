@@ -70,9 +70,22 @@ fn derives() -> proc_macro2::TokenStream {
         #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
     };
 
+    derives.extend(derive_sea_orm());
     derives.extend(derive_serde());
 
     derives
+}
+
+#[cfg(feature = "sea-orm")]
+fn derive_sea_orm() -> proc_macro2::TokenStream {
+    quote! {
+        #[derive(sea_orm::DeriveValueType)]
+    }
+}
+
+#[cfg(not(feature = "sea-orm"))]
+fn derive_sea_orm() -> proc_macro2::TokenStream {
+    quote! {}
 }
 
 #[cfg(feature = "serde")]

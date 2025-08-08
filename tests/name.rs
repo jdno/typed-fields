@@ -15,6 +15,25 @@ fn get() {
     assert_eq!("test", name.get());
 }
 
+#[cfg(feature = "sea-orm")]
+#[test]
+fn compiles_in_sea_orm_model() {
+    use sea_orm::entity::prelude::*;
+
+    #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
+    #[sea_orm(table_name = "cake")]
+    pub struct Model {
+        #[sea_orm(primary_key)]
+        id: i32,
+        name: TestName,
+    }
+
+    #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+    pub enum Relation {}
+
+    impl ActiveModelBehavior for ActiveModel {}
+}
+
 #[cfg(feature = "serde")]
 #[test]
 fn trait_deserialize() {
