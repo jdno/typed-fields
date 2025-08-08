@@ -14,6 +14,7 @@ repos:
       - id: check-added-large-files
       - id: check-case-conflict
       - id: end-of-file-fixer
+        exclude: ^.flox/env/manifest.lock$
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
   - repo: local

@@ -11,8 +11,4 @@
   "pre-commit": {
     enabled: true,
   },
-
-  dockerfile: {
-    fileMatch: ["^Earthfile$"],
-  },
 }
