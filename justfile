@@ -101,7 +101,7 @@ prettier fix="false" extension="*":
 
 # Publish the crate to crates.io
 publish:
-    cargo publish--all-features --token $CARGO_REGISTRY_TOKEN
+    cargo publish --all-features --token $CARGO_REGISTRY_TOKEN
 
 # Run the tests
 test-rust:
