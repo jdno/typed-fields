@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-08-09
+
+### Added
+
+- Add support for SeaORM
+
+### Changed
+
+- Upgrade to Rust edition 2024 and set MSRV to 1.85.0
+
 ## [0.4.3] - 2025-07-04
 
 ### Changed
@@ -65,6 +75,7 @@ and this project adheres to
 - Optionally derive serde traits
 - Create `secret!` macro for fields with secrets
 
+[0.5.0]: https://github.com/jdno/typed-fields/releases/tag/v0.5.0
 [0.4.2]: https://github.com/jdno/typed-fields/releases/tag/v0.4.2
 [0.4.1]: https://github.com/jdno/typed-fields/releases/tag/v0.4.1
 [0.4.0]: https://github.com/jdno/typed-fields/releases/tag/v0.4.0
