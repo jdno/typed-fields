@@ -26,6 +26,25 @@ fn get() {
     assert_eq!(&input, url.get());
 }
 
+#[cfg(all(feature = "url", feature = "sea-orm"))]
+#[test]
+fn compiles_in_sea_orm_model() {
+    use sea_orm::entity::prelude::*;
+
+    #[derive(Clone, Debug, DeriveEntityModel)]
+    #[sea_orm(table_name = "cake")]
+    pub struct Model {
+        #[sea_orm(primary_key)]
+        id: i32,
+        url: TestUrl,
+    }
+
+    #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+    pub enum Relation {}
+
+    impl ActiveModelBehavior for ActiveModel {}
+}
+
 #[cfg(all(feature = "serde", feature = "url"))]
 #[test]
 fn trait_deserialize() {
