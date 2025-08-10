@@ -8,6 +8,11 @@ number!(
     TestId
 );
 
+number!(
+    /// A `u64` backed number type
+    TestU64, u64
+);
+
 #[test]
 fn get() {
     let id = TestId::new(42);
@@ -32,6 +37,12 @@ fn compiles_in_sea_orm_model() {
     pub enum Relation {}
 
     impl ActiveModelBehavior for ActiveModel {}
+}
+
+#[test]
+fn u64() {
+    let id = TestU64::new(42u64);
+    assert_eq!(42u64, id.get());
 }
 
 #[cfg(feature = "serde")]

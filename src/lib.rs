@@ -70,23 +70,32 @@ pub fn name(input: TokenStream) -> TokenStream {
 
 /// Generate a new type for a number
 ///
-/// The `number!` macro generates a new type that is backed by an `i64`. The new type implements
-/// common traits like `Display` and `From<i64>`. The inner value can be accessed using the `get`
-/// method.
+/// The `number!` macro generates a new type that is backed by a numeric primitive. By default it
+/// uses `i64`, but you can optionally provide a different backing type, e.g. `u64`. The new type
+/// implements common traits like `Display` and `From<T>`, where `T` is the chosen backing type. The
+/// inner value can be accessed using the `get` method.
 ///
-/// # Example
+/// # Examples
 ///
 /// ```
 /// use typed_fields::number;
 ///
-/// // Define a new type that is backed by an `i64`
 /// number!(UserId);
 ///
-/// // Create a new `UserId` from an `i64`
 /// let id = UserId::new(42);
-///
-/// // Common traits like `Display` are automatically implemented for the type
 /// println!("User ID: {}", id);
+/// ```
+///
+/// The default backing type is `i64`, but this can be changed by passing another type as the second
+/// argument:
+///
+/// ```
+/// use typed_fields::number;
+///
+/// number!(Revision, u64);
+///
+/// let rev = Revision::new(42u64);
+/// assert_eq!(42u64, rev.get());
 /// ```
 #[proc_macro]
 pub fn number(input: TokenStream) -> TokenStream {
