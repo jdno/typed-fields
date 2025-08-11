@@ -26,7 +26,7 @@ check-latest-deps:
     cargo update
     cargo test --all-features --all-targets --locked
     git checkout -- Cargo.lock
-    git stash pop --quiet
+    git stash pop --quiet || exit 0
 
 # Check the minimal dependencies
 check-minimal-deps:
@@ -44,7 +44,7 @@ check-minimal-deps:
     rustup default "${toolchain}"
 
     git checkout -- Cargo.lock
-    git stash pop --quiet
+    git stash pop --quiet || exit 0
 
 # Check the Minimum Supported Rust Version
 check-msrv:
@@ -60,7 +60,7 @@ check-msrv:
     cargo check --all-features --all-targets
     rustup default "${toolchain}"
 
-    git stash pop --quiet
+    git stash pop --quiet || exit 0
 
 # Format JSON files
 format-json fix="false": (prettier fix "{json,json5}")
