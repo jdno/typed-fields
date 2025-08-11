@@ -70,11 +70,11 @@ format-markdown fix="false": (prettier fix "md")
 
 # Format Rust files
 format-rust fix="false":
-    cargo fmt {{ if fix != "true" { "--check" }  else { "" } }}
+    cargo fmt {{ if fix != "true" { "--check" } else { "" } }}
 
 # Format TOML files
 format-toml fix="false":
-    taplo fmt {{ if fix != "true" { "--diff" }  else { "" } }}
+    taplo fmt {{ if fix != "true" { "--diff" } else { "" } }}
 
 # Format YAML files
 format-yaml fix="false": (prettier fix "{yaml,yml}")
@@ -82,6 +82,10 @@ format-yaml fix="false": (prettier fix "{yaml,yml}")
 # Lint Markdown files
 lint-markdown:
     markdownlint **/*.md
+
+# Lint dependent crates
+lint-dependents:
+    cd tests/krate && cargo clippy -- -D warnings
 
 # Lint Rust files
 lint-rust:
@@ -101,7 +105,7 @@ prettier fix="false" extension="*":
 
 # Publish the crate to crates.io
 publish:
-    cargo publish --all-features --token $CARGO_REGISTRY_TOKEN
+    cargo publish -p typed-fields --all-features --token $CARGO_REGISTRY_TOKEN
 
 # Run the tests
 test-rust:
