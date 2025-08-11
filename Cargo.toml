@@ -1,3 +1,8 @@
+[workspace]
+# The workspace makes it easier to build the proc-macro crate and run its
+# integration tests in the test krate.
+members = [".", "tests/krate"]
+
 [package]
 name = "typed-fields"
 version = "0.5.1"

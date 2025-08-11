@@ -1,0 +1,6 @@
+[package]
+name = "krate"
+edition = "2024"
+
+[dependencies]
+typed-fields = { path = "../.." }

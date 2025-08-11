@@ -89,14 +89,12 @@ fn derives() -> proc_macro2::TokenStream {
 #[cfg(feature = "sea-orm")]
 fn sea_orm_trait_impls(ident: &Ident) -> proc_macro2::TokenStream {
     quote! {
-        #[cfg(feature = "sea-orm")]
         impl From<#ident> for sea_orm::Value {
             fn from(source: #ident) -> Self {
                 source.0.into()
             }
         }
 
-        #[cfg(feature = "sea-orm")]
         impl sea_orm::TryGetable for #ident {
             fn try_get_by<I: sea_orm::ColIdx>(result: &sea_orm::QueryResult, index: I) -> Result<Self, sea_orm::TryGetError> {
                 let uuid = <uuid::Uuid as sea_orm::TryGetable>::try_get_by(result, index)?;
@@ -104,7 +102,6 @@ fn sea_orm_trait_impls(ident: &Ident) -> proc_macro2::TokenStream {
             }
         }
 
-        #[cfg(feature = "sea-orm")]
         impl sea_orm::sea_query::ValueType for #ident {
             fn try_from(value: sea_orm::Value) -> Result<Self, sea_orm::sea_query::ValueTypeErr> {
                 let uuid = <uuid::Uuid as sea_orm::sea_query::ValueType>::try_from(value)?;
@@ -124,7 +121,6 @@ fn sea_orm_trait_impls(ident: &Ident) -> proc_macro2::TokenStream {
             }
         }
 
-        #[cfg(feature = "sea-orm")]
         impl sea_orm::sea_query::Nullable for #ident {
             fn null() -> sea_orm::Value {
                 <String as sea_orm::sea_query::Nullable>::null()
