@@ -26,6 +26,9 @@ jobs:
       - name: Install Flox
         uses: flox/install-flox-action@v2
 
+      - name: Remove Flox installer (if it exists)
+        run: rm -f flox.x86_64-linux.deb
+
       - name: Run tests with latest dependency versions
         uses: flox/activate-action@v1
         with:
