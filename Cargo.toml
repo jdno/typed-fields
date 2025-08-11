@@ -5,7 +5,7 @@ members = [".", "tests/krate"]
 
 [package]
 name = "typed-fields"
-version = "0.5.1"
+version = "0.5.2"
 edition = "2024"
 
 description = "A collection of macros that generate newtypes"
