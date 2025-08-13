@@ -26,10 +26,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Rust via rustup and add common components
-ENV RUSTUP_HOME=/usr/local/rustup \
-    CARGO_HOME=/usr/local/cargo \
-    PATH=/usr/local/cargo/bin:${PATH}
-
 RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable && \
     rustup component add clippy rustfmt rust-src && \
     rustc -V && \
@@ -42,15 +38,10 @@ RUN cargo install cargo-hack taplo-cli \
 
 # Create a non-root user (vscode) if not present (typical in devcontainers base)
 # Ensure cargo and rustup are accessible to the user
-RUN usermod -aG sudo vscode || true \
-    && chown -R vscode:vscode ${RUSTUP_HOME} ${CARGO_HOME}
+RUN usermod -aG sudo vscode
 
 # Set working directory inside container
 WORKDIR /workspaces/typed-fields
-
-# Pre-create cargo cache directories to allow mounting as volumes without root permission issues
-RUN mkdir -p /usr/local/cargo/registry /usr/local/cargo/git \
-    && chown -R vscode:vscode /usr/local/cargo
 
 # Default command
 CMD ["sleep", "infinity"]
