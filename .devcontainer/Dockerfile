@@ -23,14 +23,13 @@ RUN apt-get update \
         pkg-config \
         python3 \
         python3-pip \
+        rustup \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Rust via rustup and add common components
-ENV RUSTUP_HOME=/usr/local/rustup \
-    CARGO_HOME=/usr/local/cargo \
-    PATH=/usr/local/cargo/bin:${PATH}
+ENV PATH="/root/.cargo/bin/:${PATH}"
 
-RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable && \
+RUN rustup default stable && \
     rustup component add clippy rustfmt rust-src && \
     rustc -V && \
     cargo -V
@@ -40,18 +39,8 @@ RUN cargo install cargo-hack taplo-cli \
     && npm install -g prettier markdownlint-cli \
     && pip3 install --no-cache-dir --break-system-packages pre-commit yamllint
 
-# Create a non-root user (vscode) if not present (typical in devcontainers base)
-RUN usermod -aG sudo vscode || true
-
-# Ensure cargo and rustup are accessible to the user
-RUN chmod -R a+w ${RUSTUP_HOME} ${CARGO_HOME}
-
 # Set working directory inside container
 WORKDIR /workspaces/typed-fields
-
-# Pre-create cargo cache directories to allow mounting as volumes without root permission issues
-RUN mkdir -p /usr/local/cargo/registry /usr/local/cargo/git \
-    && chown -R vscode:vscode /usr/local/cargo
 
 # Default command
 CMD ["sleep", "infinity"]
