@@ -38,7 +38,7 @@ RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-to
 # Developer tools used by the project
 RUN cargo install cargo-hack taplo-cli \
     && npm install -g prettier markdownlint-cli \
-    && pip3 install --no-cache-dir --break-system-packages yamllint
+    && pip3 install --no-cache-dir --break-system-packages pre-commit yamllint
 
 # Create a non-root user (vscode) if not present (typical in devcontainers base)
 # Ensure cargo and rustup are accessible to the user
