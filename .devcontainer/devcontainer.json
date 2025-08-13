@@ -1,0 +1,9 @@
+{
+  "build": {
+    "dockerfile": "./Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/workspaces/typed-fields",
+  "features": {},
+  "remoteUser": "vscode"
+}
