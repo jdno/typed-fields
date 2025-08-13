@@ -16,20 +16,16 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      packages: write
+      packages: read
       contents: read
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Install Flox
-        uses: flox/install-flox-action@v2
-
-      - name: Remove Flox installer (if it exists)
-        run: rm -f flox.x86_64-linux.deb
-
       - name: Run tests with latest dependency versions
-        uses: flox/activate-action@v1
+        uses: devcontainers/ci@v0.3
         with:
-          command: just check-latest-deps
+          cacheFrom: ghcr.io/jdno/typed-fields-devcontainer
+          push: never
+          runCmd: just check-latest-deps

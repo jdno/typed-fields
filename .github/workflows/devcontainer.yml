@@ -1,0 +1,28 @@
+---
+name: Devcontainer
+
+"on":
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  labels:
+    name: Pre-build
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Pre-build devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          cacheFrom: ghcr.io/jdno/typed-fields-devcontainer
+          imageName: ghcr.io/jdno/typed-fields-devcontainer
+          push: always
