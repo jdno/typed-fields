@@ -5,5 +5,19 @@
   },
   "workspaceFolder": "/workspaces/typed-fields",
   "features": {},
+  "customizations": {
+    "jetbrains": {
+      "extensions": [
+        "Docker",
+        "com.jetbrains.rust",
+        "intellij.prettierJS",
+        "org.editorconfig.editorconfigjetbrains",
+        "org.jetbrains.plugins.yaml",
+        "org.mvnsearch.plugins.justPlugin",
+        "org.toml.lang",
+        "ru.adelf.idea.dotenv"
+      ]
+    }
+  },
   "remoteUser": "vscode"
 }
