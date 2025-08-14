@@ -30,8 +30,10 @@ RUN cargo install cargo-hack just taplo-cli \
     && pip3 install --no-cache-dir --break-system-packages pre-commit yamllint
 
 # Create a non-root user (vscode) if not present (typical in devcontainers base)
-# and ensure cargo and rustup are accessible to the user
 RUN usermod -aG sudo vscode || true
+
+# Ensure cargo and rustup are accessible to the user
+RUN chown -R vscode:vscode ${RUSTUP_HOME} ${CARGO_HOME}
 
 # Set working directory inside container
 WORKDIR /workspaces/typed-fields
