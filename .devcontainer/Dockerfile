@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# Use a base image with sensible defaults for devcontainers
-FROM mcr.microsoft.com/devcontainers/base:ubuntu
+FROM ubuntu:25.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -14,6 +13,7 @@ RUN apt-get update \
         curl \
         gcc \
         git \
+        just \
         jq \
         libpq-dev \
         libssl-dev \
@@ -30,26 +30,25 @@ RUN apt-get update \
 RUN npm install -g prettier markdownlint-cli \
     && pip3 install --no-cache-dir --break-system-packages pre-commit yamllint
 
-# Create a shared location for Rust toolchains
-RUN mkdir -p /usr/local/rustup /usr/local/cargo
-ENV RUSTUP_HOME=/usr/local/rustup \
-    CARGO_HOME=/usr/local/cargo \
-    PATH=/usr/local/cargo/bin:${PATH}
+# Create a non-root user for development
+RUN groupadd vscode && useradd --create-home --gid vscode -s /bin/bash vscode \
+    && echo vscode ALL=\(root\) NOPASSWD:ALL > /etc/sudoers
 
-# Install the stable Rust toolchain
-RUN rustup default stable
+# Create workspace directory and set permissions
+RUN mkdir -p /workspaces/typed-fields \
+    && chown -R vscode:vscode /workspaces/typed-fields
 
-# Change ownership of Rust directories to the vscode user
-RUN chown -R vscode:vscode ${RUSTUP_HOME} ${CARGO_HOME}
-
-# Run commands as the vscode user
+# Run commands in the container as the vscode user
 USER vscode
-
-# Install Cargo binaries
-RUN cargo install cargo-hack just taplo-cli
 
 # Set working directory inside container
 WORKDIR /workspaces/typed-fields
+
+# Install Rust toolchain
+RUN rustup default stable
+
+# Install more developer tools with cargo
+RUN cargo install cargo-hack taplo-cli
 
 # Default command
 CMD ["sleep", "infinity"]
