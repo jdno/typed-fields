@@ -13,25 +13,21 @@ jobs:
     permissions:
       contents: read
       id-token: write
-      packages: write
+      packages: read
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-
-      - name: Install Flox
-        uses: flox/install-flox-action@v2
-
-      - name: Remove Flox installer (if it exists)
-        run: rm -f flox.x86_64-linux.deb
 
       - name: Authenticate with crates.io
         id: auth
         uses: rust-lang/crates-io-auth-action@v1
 
       - name: Publish crate
-        uses: flox/activate-action@v1
+        uses: devcontainers/ci@v0.3
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
         with:
-          command: just publish
+          cacheFrom: ghcr.io/jdno/typed-fields-devcontainer
+          push: never
+          runCmd: just publish
