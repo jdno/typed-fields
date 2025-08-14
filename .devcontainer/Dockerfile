@@ -14,7 +14,6 @@ RUN apt-get update \
         gcc \
         git \
         jq \
-        just \
         libpq-dev \
         libssl-dev \
         nodejs \
@@ -26,7 +25,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Developer tools used by the project
-RUN cargo install cargo-hack taplo-cli \
+RUN cargo install cargo-hack just taplo-cli \
     && npm install -g prettier markdownlint-cli \
     && pip3 install --no-cache-dir --break-system-packages pre-commit yamllint
 
