@@ -44,6 +44,9 @@ USER vscode
 # Set working directory inside container
 WORKDIR /workspaces/typed-fields
 
+# Add Cargo binaries to path
+ENV PATH="/home/vscode/.cargo/bin:${PATH}"
+
 # Install Rust toolchain
 RUN rustup default stable
 
