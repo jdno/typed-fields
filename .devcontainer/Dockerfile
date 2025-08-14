@@ -24,6 +24,7 @@ RUN apt-get update \
         python3 \
         python3-pip \
         rustup \
+        vim \
     && rm -rf /var/lib/apt/lists/*
 
 # Install global developer tools as root
