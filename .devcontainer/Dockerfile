@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:plucky-20250714
+FROM ubuntu:plucky-20250730
 
 ENV DEBIAN_FRONTEND=noninteractive
 
