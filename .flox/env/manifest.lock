@@ -3,6 +3,9 @@
   "manifest": {
     "version": 1,
     "install": {
+      "cargo-hack": {
+        "pkg-path": "cargo-hack"
+      },
       "cargo-udeps": {
         "pkg-path": "cargo-udeps"
       },
@@ -175,6 +178,122 @@
       },
       "system": "x86_64-linux",
       "group": "rust-toolchain",
+      "priority": 5
+    },
+    {
+      "attr_path": "cargo-hack",
+      "broken": false,
+      "derivation": "/nix/store/4igirxadz16dg8xmr7dcy6fgg1263jmh-cargo-hack-0.6.39.drv",
+      "description": "Cargo subcommand to provide various options useful for testing and continuous integration",
+      "install_id": "cargo-hack",
+      "license": "[ Apache-2.0, MIT ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+      "name": "cargo-hack-0.6.39",
+      "pname": "cargo-hack",
+      "rev": "2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+      "rev_count": 904649,
+      "rev_date": "2025-11-30T15:51:17Z",
+      "scrape_date": "2025-12-02T02:53:50.058248Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.6.39",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/bhzxxx5i0kjv4rich1zdp3r88p59jd88-cargo-hack-0.6.39"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "cargo-hack",
+      "broken": false,
+      "derivation": "/nix/store/ckxkdyvsiz20fy8zz5agkgmij3b394qa-cargo-hack-0.6.39.drv",
+      "description": "Cargo subcommand to provide various options useful for testing and continuous integration",
+      "install_id": "cargo-hack",
+      "license": "[ Apache-2.0, MIT ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+      "name": "cargo-hack-0.6.39",
+      "pname": "cargo-hack",
+      "rev": "2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+      "rev_count": 904649,
+      "rev_date": "2025-11-30T15:51:17Z",
+      "scrape_date": "2025-12-02T03:02:28.791733Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.6.39",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/qsv9arxjqp6p1j09v2f2wxfssg05q7rr-cargo-hack-0.6.39"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "cargo-hack",
+      "broken": false,
+      "derivation": "/nix/store/kfpz7clvbwanmvj49zmvrlcv5238bp5v-cargo-hack-0.6.39.drv",
+      "description": "Cargo subcommand to provide various options useful for testing and continuous integration",
+      "install_id": "cargo-hack",
+      "license": "[ Apache-2.0, MIT ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+      "name": "cargo-hack-0.6.39",
+      "pname": "cargo-hack",
+      "rev": "2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+      "rev_count": 904649,
+      "rev_date": "2025-11-30T15:51:17Z",
+      "scrape_date": "2025-12-02T03:11:59.929775Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.6.39",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/qfkh07mbr2wlnx4fn70zlq7q1cdzik71-cargo-hack-0.6.39"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "cargo-hack",
+      "broken": false,
+      "derivation": "/nix/store/yfdwaxn1siakwa1cn6fgqxspxmamlzax-cargo-hack-0.6.39.drv",
+      "description": "Cargo subcommand to provide various options useful for testing and continuous integration",
+      "install_id": "cargo-hack",
+      "license": "[ Apache-2.0, MIT ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+      "name": "cargo-hack-0.6.39",
+      "pname": "cargo-hack",
+      "rev": "2d293cbfa5a793b4c50d17c05ef9e385b90edf6c",
+      "rev_count": 904649,
+      "rev_date": "2025-11-30T15:51:17Z",
+      "scrape_date": "2025-12-02T03:20:40.376138Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.6.39",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/iw01lwb1k3i6hsdp8mbz1fgaj6dpvgnb-cargo-hack-0.6.39"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
       "priority": 5
     },
     {

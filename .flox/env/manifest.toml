@@ -31,6 +31,7 @@ prettier.pkg-path = "prettier"
 taplo.pkg-path = "taplo"
 yamllint.pkg-path = "yamllint"
 zizmor.pkg-path = "zizmor"
+cargo-hack.pkg-path = "cargo-hack"
 
 [vars]
 
