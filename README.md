@@ -7,6 +7,7 @@ Do you like strongly-typed structs?
 
 - `name!` - a string-based type
 - `number!` - a number-based type
+- `path!` - a type for filesystem paths
 - `secret!` - a type for secrets (requires the `secret` feature)
 - `ulid!` - a type for ULIDs (requires the `ulid` feature)
 - `url!` - a type for URLs (requires the `url` feature)
