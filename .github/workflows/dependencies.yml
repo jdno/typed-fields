@@ -10,22 +10,33 @@ name: Dependencies
     - cron: "44 4 * * *"
   workflow_dispatch:
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   latest:
     name: Latest versions
     runs-on: ubuntu-latest
 
     permissions:
-      packages: read
       contents: read
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Run tests with latest dependency versions
-        uses: devcontainers/ci@v0.3
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # 6.0.0
         with:
-          cacheFrom: ghcr.io/jdno/typed-fields-devcontainer
-          push: never
-          runCmd: just check-latest-deps
+          persist-credentials: false
+
+      - name: Install Flox
+        uses: flox/install-flox-action@819183ecd53757be53d66f492eeb7d689687a66b # 2.1.0
+
+      - name: Remove Flox installer (if it exists)
+        run: rm -f flox.x86_64-linux.deb
+
+      - name: Run check with Just
+        uses: flox/activate-action@bdcbcf8d84af6f503e588ae4125e48133787df95 # 1.0.0
+        with:
+          command: just check-latest-deps
