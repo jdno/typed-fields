@@ -1985,7 +1985,7 @@ dependencies = [
 
 [[package]]
 name = "typed-fields"
-version = "0.5.2"
+version = "0.6.0"
 dependencies = [
  "proc-macro2",
  "quote",
