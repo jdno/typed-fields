@@ -34,6 +34,7 @@ use syn::parse::{Parse, ParseStream};
 
 mod name;
 mod number;
+mod path;
 #[cfg(feature = "secret")]
 mod secret;
 #[cfg(feature = "ulid")]
@@ -100,6 +101,28 @@ pub fn name(input: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn number(input: TokenStream) -> TokenStream {
     number::number_impl(input)
+}
+
+/// Generate a new type for a path
+///
+/// The `path!` macro generates a new type that is backed by a `PathBuf`. The new type implements
+/// common traits like `Display` and `From<&Path>`. The inner value can be accessed using the
+/// `get` method.
+///
+/// # Examples
+///
+/// ```
+/// use std::path::PathBuf;
+/// use typed_fields::path;
+///
+/// path!(MyPath);
+///
+/// let path = MyPath::new(PathBuf::from("src"));
+/// println!("My path: {}", path);
+/// ```
+#[proc_macro]
+pub fn path(input: TokenStream) -> TokenStream {
+    path::path_impl(input)
 }
 
 /// Generate a new type for a secret
