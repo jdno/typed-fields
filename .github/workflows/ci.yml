@@ -5,6 +5,12 @@ name: Continuous Integration
   pull_request:
   workflow_dispatch:
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   targets:
     name: Enumerate Just recipes
@@ -18,10 +24,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # 6.0.0
+        with:
+          persist-credentials: false
 
       - name: Install Just
-        uses: taiki-e/install-action@just
+        uses: taiki-e/install-action@1ee706eb04986370fc60419ba172594c51067f29 # 2.62.58
+        with:
+          tool: just
 
       - name: Export targets
         id: export-targets
@@ -32,7 +42,6 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      packages: read
       contents: read
 
     needs: targets
@@ -44,14 +53,20 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # 6.0.0
+        with:
+          persist-credentials: false
+
+      - name: Install Flox
+        uses: flox/install-flox-action@819183ecd53757be53d66f492eeb7d689687a66b # 2.1.0
+
+      - name: Remove Flox installer (if it exists)
+        run: rm -f flox.x86_64-linux.deb
 
       - name: Run check with Just
-        uses: devcontainers/ci@v0.3
+        uses: flox/activate-action@bdcbcf8d84af6f503e588ae4125e48133787df95 # 1.0.0
         with:
-          cacheFrom: ghcr.io/jdno/typed-fields-devcontainer
-          push: never
-          runCmd: just ${{ matrix.target }}
+          command: just ${{ matrix.target }}
 
   success:
     name: All checks succeeded
@@ -64,4 +79,7 @@ jobs:
 
     steps:
       - name: Check if all checks succeeded
+        # `needs` is a list of job names, which themselves are generated from
+        # the output of `just --list`, so we ignore the template injection here.
+        # zizmor: ignore[template-injection]
         run: jq --exit-status 'all(.result == "success")' <<< '${{ toJson(needs) }}'

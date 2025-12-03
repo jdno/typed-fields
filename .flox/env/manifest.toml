@@ -1,0 +1,54 @@
+# Flox manifest version managed by Flox CLI
+version = 1
+
+[install]
+# Rustup installs rustc, cargo, clippy, rust-analyzer, and rustfmt
+rustup.pkg-path = "rustup"
+
+# The standard library links against this package on macOS.
+libiconv.pkg-path = "libiconv"
+libiconv.systems = ["aarch64-darwin", "x86_64-darwin"]
+
+# This package provides the source code for the standard library, which is used
+# by rust-analyzer below to provide diagnostics and documentation.
+rust-lib-src.pkg-group = "rust-toolchain"
+rust-lib-src.pkg-path = "rustPlatform.rustLibSrc"
+
+# We install gcc and clang as linkers for Rust.
+clang.pkg-path = "clang"
+clang.systems = ["aarch64-darwin", "x86_64-darwin"]
+gcc.pkg-path = "gcc"
+gcc.systems = ["aarch64-linux", "x86_64-linux"]
+
+# Local development tools
+cargo-udeps.pkg-path = "cargo-udeps"
+git.pkg-path = "git"
+just.pkg-path = "just"
+markdownlint-cli.pkg-path = "markdownlint-cli"
+parallel.pkg-path = "parallel"
+pre-commit.pkg-path = "pre-commit"
+prettier.pkg-path = "prettier"
+taplo.pkg-path = "taplo"
+yamllint.pkg-path = "yamllint"
+zizmor.pkg-path = "zizmor"
+
+[vars]
+
+[hook]
+on-activate = '''
+# On GitHub Actions, we need to increase the static TLS size for glibc to avoid
+# an "cannot allocate memory in static TLS block" error when loading Rust.
+if [ -n "$GITHUB_ACTIONS" ]; then
+  export GLIBC_TUNABLES=glibc.rtld.optional_static_tls=16384
+fi
+'''
+
+[profile]
+
+[services]
+
+[include]
+
+[build]
+
+[options]

@@ -1,66 +1,93 @@
+# Run all recipes inside the Flox environment
+set shell := ["flox", "activate", "--", "sh", "-cu"]
+
 [private]
 default:
     @just --list
 
 # Run a subset of checks as pre-commit hooks
 pre-commit:
-    #!/usr/bin/env -S parallel --shebang --ungroup --jobs {{ num_cpus() }}
+    #!/usr/bin/env -S flox activate -- parallel --shebang --ungroup --jobs {{ num_cpus() }}
     just prettier true
     just format-toml true
     just format-rust true
+    just lint-github-actions
     just lint-markdown
     just lint-rust
     just lint-yaml
+    just test-rust
 
-# Build the documentation
+# Build the documentation for the crates
 build-docs:
     cargo doc --all-features --no-deps
 
-# Check that Cargo features compile
+# Check that all Cargo features compile
 check-features:
     cargo hack --feature-powerset check --lib --tests
 
-# Check the latest dependencies
-check-latest-deps:
-    git stash push --keep-index --include-untracked --message "check-latest-deps"
-    cargo update
-    cargo test --all-features --all-targets --locked
-    git checkout -- Cargo.lock
-    git stash pop --quiet || exit 0
-
-# Check the minimal dependencies
-check-minimal-deps:
+# Check that typed-fields builds with the latest dependencies
+check-latest-deps force="false":
     #!/usr/bin/env bash
     set -euo pipefail
 
-    git stash push --keep-index --include-untracked --message "check-minimal-deps"
+    # Abort if git is not clean (but ignore Flox's manifest.lock)
+    if [[ {{force}} != "true" && -n $(git status --porcelain -- ':!.flox/env/manifest.lock') ]]; then
+        echo "Git working directory is not clean. Commit or stash changes before running this recipe. Aborting."
+        git status --porcelain
+        exit 1
+    fi
 
-    toolchain=$(rustup show active-toolchain | cut -d' ' -f1)
-    rustup default nightly
+    # Update dependencies to latest versions
+    cargo update
 
-    cargo update -Z direct-minimal-versions
-    cargo test --all-features --all-targets --locked
+    # Run tests to ensure the latest versions are compatible
+    RUSTFLAGS="-D deprecated" cargo test --all-features --all-targets --locked
 
-    rustup default "${toolchain}"
+# Check that typed-fields builds with the minimal dependencies
+check-minimal-deps force="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
 
-    git checkout -- Cargo.lock
-    git stash pop --quiet || exit 0
+    # Abort if git is not clean (but ignore Flox's manifest.lock)
+    if [[ {{force}} != "true" && -n $(git status --porcelain -- ':!.flox/env/manifest.lock') ]]; then
+        echo "Git working directory is not clean. Commit or stash changes before running this recipe. Aborting."
+        git status --porcelain
+        exit 1
+    fi
+
+    # Install the nightly toolchain if not already installed
+    rustup install nightly
+
+    # Update dependencies to minimal versions
+    rustup run nightly cargo update -Z direct-minimal-versions
+
+    # Run tests to ensure the minimal versions are compatible
+    RUSTFLAGS="-D deprecated" rustup run nightly cargo test --all-features --all-targets --locked
 
 # Check the Minimum Supported Rust Version
 check-msrv:
     #!/usr/bin/env bash
     set -euo pipefail
 
-    git stash push --keep-index --include-untracked --message "check-msrv"
+    # Get the MSRV from the Cargo.toml
+    MSRV=$(cat Cargo.toml | grep 'rust-version =' | head -n 1 | cut -d '"' -f 2)
 
-    toolchain=$(rustup show active-toolchain | cut -d' ' -f1)
-    msrv=$(cat Cargo.toml | grep "rust-version" | cut -d'"' -f2)
+    # Install the MSRV toolchain if not already installed
+    rustup install "${MSRV}"
 
-    rustup default "${msrv}"
-    cargo check --all-features --all-targets
-    rustup default "${toolchain}"
+    # Run tests using the MSRV
+    RUSTFLAGS="-D deprecated" rustup run "${MSRV}" cargo check --all-features --all-targets
 
-    git stash pop --quiet || exit 0
+# Check that all dependencies in Cargo.toml are used
+check-unused-deps:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Install the nightly toolchain if not already installed
+    rustup install nightly
+
+    # Check for unused dependencies
+    rustup run nightly cargo udeps
 
 # Format JSON files
 format-json fix="false": (prettier fix "{json,json5}")
@@ -79,13 +106,17 @@ format-toml fix="false":
 # Format YAML files
 format-yaml fix="false": (prettier fix "{yaml,yml}")
 
-# Lint Markdown files
-lint-markdown:
-    markdownlint **/*.md
-
 # Lint dependent crates
 lint-dependents:
     cd tests/krate && cargo clippy -- -D warnings
+
+# Lint GitHub Actions workflows
+lint-github-actions:
+    zizmor -p .
+
+# Lint Markdown files
+lint-markdown:
+    markdownlint --ignore-path .gitignore **/*.md
 
 # Lint Rust files
 lint-rust:
@@ -100,6 +131,7 @@ lint-yaml:
     yamllint .
 
 # Auto-format files with prettier
+[private]
 prettier fix="false" extension="*":
     prettier {{ if fix == "true" { "--write" } else { "--list-different" } }} --ignore-unknown "**/*.{{ extension }}"
 
