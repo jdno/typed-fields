@@ -37,12 +37,12 @@ cargo-hack.pkg-path = "cargo-hack"
 
 [hook]
 on-activate = '''
-# On GitHub Actions, we need to increase the static TLS size for glibc to avoid
-# an "cannot allocate memory in static TLS block" error when loading Rust.
+# On GitHub Actions, we need to unset the LD_AUDIT variable to avoid an "cannot
+# allocate memory in static TLS block" error when loading Rust. See this issue:
+# https://github.com/flox/flox/issues/1341
 if [ -n "$GITHUB_ACTIONS" ]; then
-  export GLIBC_TUNABLES=glibc.rtld.optional_static_tls=16384
-fi
-'''
+  unset LD_AUDIT
+fi'''
 
 [profile]
 
