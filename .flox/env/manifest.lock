@@ -1,7 +1,7 @@
 {
   "lockfile-version": 1,
   "manifest": {
-    "version": 1,
+    "schema-version": "1.10.0",
     "install": {
       "cargo-hack": {
         "pkg-path": "cargo-hack"
@@ -21,29 +21,35 @@
         "systems": [
           "aarch64-linux",
           "x86_64-linux"
-        ]
+        ],
+        "outputs": "all"
       },
       "git": {
-        "pkg-path": "git"
+        "pkg-path": "git",
+        "outputs": "all"
       },
       "just": {
-        "pkg-path": "just"
+        "pkg-path": "just",
+        "outputs": "all"
       },
       "libiconv": {
         "pkg-path": "libiconv",
         "systems": [
           "aarch64-darwin",
           "x86_64-darwin"
-        ]
+        ],
+        "outputs": "all"
       },
       "markdownlint-cli": {
         "pkg-path": "markdownlint-cli"
       },
       "parallel": {
-        "pkg-path": "parallel"
+        "pkg-path": "parallel",
+        "outputs": "all"
       },
       "pre-commit": {
-        "pkg-path": "pre-commit"
+        "pkg-path": "pre-commit",
+        "outputs": "all"
       },
       "prettier": {
         "pkg-path": "prettier"
@@ -59,7 +65,8 @@
         "pkg-path": "taplo"
       },
       "yamllint": {
-        "pkg-path": "yamllint"
+        "pkg-path": "yamllint",
+        "outputs": "all"
       },
       "zizmor": {
         "pkg-path": "zizmor"
