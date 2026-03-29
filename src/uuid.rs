@@ -24,6 +24,7 @@ pub fn uuid_impl(input: TokenStream) -> TokenStream {
             ///
             /// ```
             /// use typed_fields::uuid;
+            /// use uuid::Uuid;
             ///
             /// uuid!(MyUuid);
             ///
