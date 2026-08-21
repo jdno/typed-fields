@@ -21,6 +21,10 @@ pre-commit:
 build-docs:
     cargo doc --all-features --no-deps
 
+# Check that no feature leaks into a crate that did not enable it
+check-feature-unification:
+    cargo check --workspace --all-features
+
 # Check that all Cargo features compile
 check-features:
     cargo hack --feature-powerset check --lib --tests

@@ -1,7 +1,23 @@
 // TODO: Debug this warning, fix its cause, and remove this directive.
 #![allow(non_local_definitions)]
 
-#[cfg(all(feature = "serde", feature = "ulid"))]
+#[cfg(feature = "ulid")]
+use std::convert::TryInto;
+
+#[cfg(feature = "ulid")]
+use typed_fields::ulid;
+
+#[cfg(feature = "ulid")]
+use ulid::Ulid;
+
+#[cfg(feature = "ulid")]
+ulid!(
+    /// A doc comment for the test ULID
+    #[derive(serde::Deserialize, serde::Serialize)]
+    TestUlid
+);
+
+#[cfg(feature = "ulid")]
 #[test]
 fn deserialize_returns_ulid() {
     let json = r#""01ARZ3NDEKTSV4RRFFQ69G5FAV""#;
@@ -18,19 +34,6 @@ fn display_returns_inner_value() {
 
     assert_eq!("01ARZ3NDEKTSV4RRFFQ69G5FAV", ulid.to_string());
 }
-
-#[cfg(feature = "ulid")]
-use std::convert::TryInto;
-#[cfg(feature = "ulid")]
-use typed_fields::ulid;
-#[cfg(feature = "ulid")]
-use ulid::Ulid;
-
-#[cfg(feature = "ulid")]
-ulid!(
-    /// A doc comment for the test ULID
-    TestUlid
-);
 
 #[cfg(feature = "ulid")]
 #[test]
@@ -63,7 +66,7 @@ fn implements_unpin() {
     assert_unpin::<TestUlid>();
 }
 
-#[cfg(all(feature = "serde", feature = "ulid"))]
+#[cfg(feature = "ulid")]
 #[test]
 fn serialize_returns_json() {
     let ulid = TestUlid::new(Ulid::from_string("01ARZ3NDEKTSV4RRFFQ69G5FAV").unwrap());
