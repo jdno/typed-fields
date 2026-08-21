@@ -8,16 +8,9 @@ name!(
     TestName
 );
 
-#[test]
-fn get() {
-    let name = TestName::new("test");
-
-    assert_eq!("test", name.get());
-}
-
 #[cfg(feature = "serde")]
 #[test]
-fn trait_deserialize() {
+fn deserialize_returns_name() {
     let json = r#""test""#;
 
     let name: TestName = serde_json::from_str(json).unwrap();
@@ -26,46 +19,53 @@ fn trait_deserialize() {
 }
 
 #[test]
-fn trait_display() {
+fn display_returns_inner_value() {
     let name = TestName::new("test");
 
     assert_eq!("test", name.to_string());
 }
 
 #[test]
-fn trait_from_string() {
-    let _name: TestName = String::from("test").into();
-}
-
-#[test]
-fn trait_from_str() {
+fn from_str_returns_name() {
     let _name: TestName = "test".into();
 }
 
 #[test]
-fn trait_send() {
+fn from_string_returns_name() {
+    let _name: TestName = String::from("test").into();
+}
+
+#[test]
+fn get_returns_inner_value() {
+    let name = TestName::new("test");
+
+    assert_eq!("test", name.get());
+}
+
+#[test]
+fn implements_send() {
     fn assert_send<T: Send>() {}
     assert_send::<TestName>();
 }
 
-#[cfg(feature = "serde")]
 #[test]
-fn trait_serialize() {
-    let name = TestName::new("test");
-
-    let json = serde_json::to_string(&name).unwrap();
-
-    assert_eq!(r#""test""#, json);
-}
-
-#[test]
-fn trait_sync() {
+fn implements_sync() {
     fn assert_sync<T: Sync>() {}
     assert_sync::<TestName>();
 }
 
 #[test]
-fn trait_unpin() {
+fn implements_unpin() {
     fn assert_unpin<T: Unpin>() {}
     assert_unpin::<TestName>();
+}
+
+#[cfg(feature = "serde")]
+#[test]
+fn serialize_returns_json() {
+    let name = TestName::new("test");
+
+    let json = serde_json::to_string(&name).unwrap();
+
+    assert_eq!(r#""test""#, json);
 }

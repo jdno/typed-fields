@@ -1,6 +1,24 @@
 // TODO: Debug this warning, fix its cause, and remove this directive.
 #![allow(non_local_definitions)]
 
+#[cfg(all(feature = "serde", feature = "uuid"))]
+#[test]
+fn deserialize_returns_uuid() {
+    let json = r#""67e55044-10b1-426f-9247-bb680e5fe0c8""#;
+
+    let uuid: TestUuid = serde_json::from_str(json).unwrap();
+
+    assert_eq!("67e55044-10b1-426f-9247-bb680e5fe0c8", uuid.to_string());
+}
+
+#[cfg(feature = "uuid")]
+#[test]
+fn display_returns_inner_value() {
+    let uuid = TestUuid::new(uuid_v4!("67e55044-10b1-426f-9247-bb680e5fe0c8"));
+
+    assert_eq!("67e55044-10b1-426f-9247-bb680e5fe0c8", uuid.to_string());
+}
+
 #[cfg(feature = "uuid")]
 use std::convert::TryInto;
 
@@ -17,7 +35,7 @@ uuid!(
 
 #[cfg(feature = "uuid")]
 #[test]
-fn get() {
+fn get_returns_inner_value() {
     let input = uuid_v4!("67e55044-10b1-426f-9247-bb680e5fe0c8");
 
     let uuid = TestUuid::new(input);
@@ -25,27 +43,30 @@ fn get() {
     assert_eq!(input, *uuid.get());
 }
 
-#[cfg(all(feature = "serde", feature = "uuid"))]
+#[cfg(feature = "uuid")]
 #[test]
-fn trait_deserialize() {
-    let json = r#""67e55044-10b1-426f-9247-bb680e5fe0c8""#;
-
-    let uuid: TestUuid = serde_json::from_str(json).unwrap();
-
-    assert_eq!("67e55044-10b1-426f-9247-bb680e5fe0c8", uuid.to_string());
+fn implements_send() {
+    fn assert_send<T: Send>() {}
+    assert_send::<TestUuid>();
 }
 
 #[cfg(feature = "uuid")]
 #[test]
-fn trait_display() {
-    let uuid = TestUuid::new(uuid_v4!("67e55044-10b1-426f-9247-bb680e5fe0c8"));
+fn implements_sync() {
+    fn assert_sync<T: Sync>() {}
+    assert_sync::<TestUuid>();
+}
 
-    assert_eq!("67e55044-10b1-426f-9247-bb680e5fe0c8", uuid.to_string());
+#[cfg(feature = "uuid")]
+#[test]
+fn implements_unpin() {
+    fn assert_unpin<T: Unpin>() {}
+    assert_unpin::<TestUuid>();
 }
 
 #[cfg(all(feature = "serde", feature = "uuid"))]
 #[test]
-fn trait_serialize() {
+fn serialize_returns_json() {
     let uuid = TestUuid::new(uuid_v4!("67e55044-10b1-426f-9247-bb680e5fe0c8"));
 
     let json = serde_json::to_string(&uuid).unwrap();
@@ -55,13 +76,13 @@ fn trait_serialize() {
 
 #[cfg(feature = "uuid")]
 #[test]
-fn trait_try_from_str() {
+fn try_from_str_returns_uuid() {
     let _uuid: TestUuid = "67e55044-10b1-426f-9247-bb680e5fe0c8".try_into().unwrap();
 }
 
 #[cfg(feature = "uuid")]
 #[test]
-fn trait_try_from_str_with_random_string() {
+fn try_from_str_with_invalid_input_returns_error() {
     let uuid = TestUuid::try_from("test");
 
     assert!(uuid.is_err());
@@ -69,7 +90,7 @@ fn trait_try_from_str_with_random_string() {
 
 #[cfg(feature = "uuid")]
 #[test]
-fn trait_try_from_string() {
+fn try_from_string_returns_uuid() {
     let _uuid: TestUuid = String::from("67e55044-10b1-426f-9247-bb680e5fe0c8")
         .try_into()
         .unwrap();
@@ -77,29 +98,8 @@ fn trait_try_from_string() {
 
 #[cfg(feature = "uuid")]
 #[test]
-fn trait_try_from_string_with_random_string() {
+fn try_from_string_with_invalid_input_returns_error() {
     let uuid = TestUuid::try_from(String::from("test"));
 
     assert!(uuid.is_err());
-}
-
-#[cfg(feature = "uuid")]
-#[test]
-fn trait_send() {
-    fn assert_send<T: Send>() {}
-    assert_send::<TestUuid>();
-}
-
-#[cfg(feature = "uuid")]
-#[test]
-fn trait_sync() {
-    fn assert_sync<T: Sync>() {}
-    assert_sync::<TestUuid>();
-}
-
-#[cfg(feature = "uuid")]
-#[test]
-fn trait_unpin() {
-    fn assert_unpin<T: Unpin>() {}
-    assert_unpin::<TestUuid>();
 }
