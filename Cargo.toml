@@ -15,6 +15,17 @@ repository = "https://github.com/jdno/typed-fields"
 # Rust edition 2024 requires Rust 1.85.0 or newer.
 rust-version = "1.85.0"
 
+# Ship only what a consumer of the crate needs. Everything else, such as the
+# development environment and the CI configuration, stays in the repository.
+include = [
+  "CHANGELOG.md",
+  "LICENSE-APACHE",
+  "LICENSE-MIT",
+  "README.md",
+  "src/**/*.rs",
+  "tests/*.rs",
+]
+
 [lib]
 proc-macro = true
 
