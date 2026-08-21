@@ -27,12 +27,16 @@ fn display_returns_inner_value() {
 
 #[test]
 fn from_str_returns_name() {
-    let _name: TestName = "test".into();
+    let name: TestName = "test".into();
+
+    assert_eq!("test", name.get());
 }
 
 #[test]
 fn from_string_returns_name() {
-    let _name: TestName = String::from("test").into();
+    let name: TestName = String::from("test").into();
+
+    assert_eq!("test", name.get());
 }
 
 #[test]

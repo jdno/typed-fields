@@ -32,7 +32,9 @@ fn display_returns_inner_value() {
 
 #[test]
 fn from_i64_returns_number() {
-    let _id: TestId = 42.into();
+    let id: TestId = 42.into();
+
+    assert_eq!(42, id.get());
 }
 
 #[test]

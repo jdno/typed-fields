@@ -79,7 +79,9 @@ fn serialize_returns_json() {
 #[cfg(feature = "ulid")]
 #[test]
 fn try_from_str_returns_ulid() {
-    let _ulid: TestUlid = "01ARZ3NDEKTSV4RRFFQ69G5FAV".try_into().unwrap();
+    let ulid: TestUlid = "01ARZ3NDEKTSV4RRFFQ69G5FAV".try_into().unwrap();
+
+    assert_eq!("01ARZ3NDEKTSV4RRFFQ69G5FAV", ulid.to_string());
 }
 
 #[cfg(feature = "ulid")]
@@ -93,9 +95,11 @@ fn try_from_str_with_invalid_input_returns_error() {
 #[cfg(feature = "ulid")]
 #[test]
 fn try_from_string_returns_ulid() {
-    let _ulid: TestUlid = String::from("01ARZ3NDEKTSV4RRFFQ69G5FAV")
+    let ulid: TestUlid = String::from("01ARZ3NDEKTSV4RRFFQ69G5FAV")
         .try_into()
         .unwrap();
+
+    assert_eq!("01ARZ3NDEKTSV4RRFFQ69G5FAV", ulid.to_string());
 }
 
 #[cfg(feature = "ulid")]

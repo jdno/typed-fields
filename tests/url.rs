@@ -79,7 +79,9 @@ fn serialize_returns_json() {
 #[cfg(feature = "url")]
 #[test]
 fn try_from_str_returns_url() {
-    let _url: TestUrl = "https://example.com/".try_into().unwrap();
+    let url: TestUrl = "https://example.com/".try_into().unwrap();
+
+    assert_eq!("https://example.com/", url.to_string());
 }
 
 #[cfg(feature = "url")]
@@ -93,9 +95,14 @@ fn try_from_str_with_invalid_input_returns_error() {
 #[cfg(feature = "url")]
 #[test]
 fn try_from_string_returns_url() {
-    let _url: TestUrl = String::from("postgres://user:password@locahost:5432/postgres")
+    let url: TestUrl = String::from("postgres://user:password@locahost:5432/postgres")
         .try_into()
         .unwrap();
+
+    assert_eq!(
+        "postgres://user:password@locahost:5432/postgres",
+        url.to_string()
+    );
 }
 
 #[cfg(feature = "url")]

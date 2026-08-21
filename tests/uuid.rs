@@ -79,7 +79,9 @@ fn serialize_returns_json() {
 #[cfg(feature = "uuid")]
 #[test]
 fn try_from_str_returns_uuid() {
-    let _uuid: TestUuid = "67e55044-10b1-426f-9247-bb680e5fe0c8".try_into().unwrap();
+    let uuid: TestUuid = "67e55044-10b1-426f-9247-bb680e5fe0c8".try_into().unwrap();
+
+    assert_eq!("67e55044-10b1-426f-9247-bb680e5fe0c8", uuid.to_string());
 }
 
 #[cfg(feature = "uuid")]
@@ -93,9 +95,11 @@ fn try_from_str_with_invalid_input_returns_error() {
 #[cfg(feature = "uuid")]
 #[test]
 fn try_from_string_returns_uuid() {
-    let _uuid: TestUuid = String::from("67e55044-10b1-426f-9247-bb680e5fe0c8")
+    let uuid: TestUuid = String::from("67e55044-10b1-426f-9247-bb680e5fe0c8")
         .try_into()
         .unwrap();
+
+    assert_eq!("67e55044-10b1-426f-9247-bb680e5fe0c8", uuid.to_string());
 }
 
 #[cfg(feature = "uuid")]
