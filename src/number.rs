@@ -37,15 +37,25 @@ pub fn number_impl(input: TokenStream) -> TokenStream {
     let derives = derives();
     let backing_ty: Type = ty.unwrap_or_else(|| syn::parse_quote! { i64 });
 
+    let backing_ty_name = quote! { #backing_ty }.to_string();
+    let new_doc = format!(
+        "Creates a new `{ident}`\n\
+         \n\
+         This method creates a new `{ident}` from a `{backing_ty_name}`."
+    );
+    let get_doc = format!(
+        "Gets the inner value of the `{ident}`\n\
+         \n\
+         This method returns a copy of the inner value of the `{ident}`."
+    );
+
     let newtype = quote! {
         #(#attrs)*
         #derives
         pub struct #ident(#backing_ty);
 
         impl #ident {
-            /// Create a new `#ident`
-            ///
-            /// This method creates a new `#ident` from a `#backing_ty`.
+            #[doc = #new_doc]
             ///
             /// # Example
             ///
@@ -60,9 +70,7 @@ pub fn number_impl(input: TokenStream) -> TokenStream {
                 Self(id)
             }
 
-            /// Get the inner value of the `#ident`
-            ///
-            /// This method returns a copy of the inner value of the `#ident`.
+            #[doc = #get_doc]
             pub fn get(&self) -> #backing_ty {
                 self.0
             }

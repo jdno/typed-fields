@@ -9,15 +9,24 @@ pub fn secret_impl(input: TokenStream) -> TokenStream {
     let Input { attrs, ident } = parse_macro_input!(input as Input);
     let derives = derives();
 
+    let new_doc = format!(
+        "Creates a new `{ident}`\n\
+         \n\
+         This method creates a new `{ident}` from a `&str`."
+    );
+    let expose_doc = format!(
+        "Exposes the secret's inner value\n\
+         \n\
+         This method returns a reference to the exposed value of the `{ident}`."
+    );
+
     let newtype = quote! {
         #(#attrs)*
         #derives
         pub struct #ident(secrecy::SecretString);
 
         impl #ident {
-            /// Create a new `#ident`
-            ///
-            /// This method creates a new `#ident` from a `&str`.
+            #[doc = #new_doc]
             ///
             /// # Example
             ///
@@ -32,10 +41,7 @@ pub fn secret_impl(input: TokenStream) -> TokenStream {
                 Self(String::from(secret).into())
             }
 
-            /// Expose the secret's inner value
-            ///
-            /// This method returns a reference to the exposed value of the
-            /// `#ident`.
+            #[doc = #expose_doc]
             pub fn expose(&self) -> &str {
                 use secrecy::ExposeSecret;
                 self.0.expose_secret()

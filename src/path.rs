@@ -8,15 +8,24 @@ pub fn path_impl(input: TokenStream) -> TokenStream {
     let Input { attrs, ident } = parse_macro_input!(input as Input);
     let derives = derives();
 
+    let new_doc = format!(
+        "Creates a new `{ident}`\n\
+         \n\
+         This method creates a new `{ident}` from a `PathBuf`."
+    );
+    let get_doc = format!(
+        "Gets the inner value of the `{ident}`\n\
+         \n\
+         This method returns a reference to the inner value of the `{ident}`."
+    );
+
     let newtype = quote! {
         #(#attrs)*
         #derives
         pub struct #ident(std::path::PathBuf);
 
         impl #ident {
-            /// Create a new `#ident`
-            ///
-            /// This method creates a new `#ident` from a `PathBuf`.
+            #[doc = #new_doc]
             ///
             /// # Example
             ///
@@ -32,10 +41,7 @@ pub fn path_impl(input: TokenStream) -> TokenStream {
                 Self(path.into())
             }
 
-            /// Get the inner value of the `#ident`
-            ///
-            /// This method returns a reference to the inner value of the
-            /// `#ident`.
+            #[doc = #get_doc]
             pub fn get(&self) -> &std::path::Path {
                 &self.0
             }
