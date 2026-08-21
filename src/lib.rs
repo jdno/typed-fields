@@ -44,7 +44,7 @@ mod url;
 #[cfg(feature = "uuid")]
 mod uuid;
 
-/// Generate a new type for a string
+/// Generates a new type for a string
 ///
 /// The `name!` macro generates a new type that is backed by a `String`. The new type implements
 /// common traits like `Display` and `From<&str>` and `From<String>`. The inner value can be
@@ -69,7 +69,7 @@ pub fn name(input: TokenStream) -> TokenStream {
     name::name_impl(input)
 }
 
-/// Generate a new type for a number
+/// Generates a new type for a number
 ///
 /// The `number!` macro generates a new type that is backed by a numeric primitive. By default it
 /// uses `i64`, but you can optionally provide a different backing type, e.g. `u64`. The new type
@@ -103,7 +103,7 @@ pub fn number(input: TokenStream) -> TokenStream {
     number::number_impl(input)
 }
 
-/// Generate a new type for a path
+/// Generates a new type for a path
 ///
 /// The `path!` macro generates a new type that is backed by a `PathBuf`. The new type implements
 /// common traits like `Display` and `From<&Path>`. The inner value can be accessed using the
@@ -125,7 +125,7 @@ pub fn path(input: TokenStream) -> TokenStream {
     path::path_impl(input)
 }
 
-/// Generate a new type for a secret
+/// Generates a new type for a secret
 ///
 /// The `secret!` macro generates a new type for secrets such as passwords and API tokens. The type
 /// uses the [`secrecy`](https://crates.io/crates/secrecy) crate internally to prevent accidentally
@@ -150,7 +150,7 @@ pub fn secret(input: TokenStream) -> TokenStream {
     secret::secret_impl(input)
 }
 
-/// Generate a new type for a ULID
+/// Generates a new type for a ULID
 ///
 /// The `ulid!` macro generates a new type that is backed by a `Ulid` from the [`ulid`] crate. The
 /// new type implements common traits like `Display` and `From<&str>` and `From<String>`. The inner
@@ -177,7 +177,7 @@ pub fn ulid(input: TokenStream) -> TokenStream {
     ulid::ulid_impl(input)
 }
 
-/// Generate a new type for a URL
+/// Generates a new type for a URL
 ///
 /// The `url!` macro generates a new type that is backed by a `Url` from the [`url`] crate. The new
 /// type implements common traits like `Display` and `TryFrom<&str>` and `TryFrom<String>`. The
@@ -204,7 +204,7 @@ pub fn url(input: TokenStream) -> TokenStream {
     url::url_impl(input)
 }
 
-/// Generate a new type for a UUID
+/// Generates a new type for a UUID
 ///
 /// The `uuid!` macro generates a new type that is backed by a `Uuid` from the [`uuid`] crate. The
 /// new type implements common traits like `Display` and `TryFrom<&str>` and `TryFrom<String>`. The
