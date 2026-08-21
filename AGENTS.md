@@ -67,7 +67,11 @@ newtype pattern in Rust.
 - Use blank lines to separate Arrange/Act/Assert phases.
 - Test functions ordered alphabetically within modules.
 - Name tests descriptively: `function_name_<condition>_<result>`, e.g.
-  `greet_with_name_returns_greeting`.
+  `greet_with_name_returns_greeting`. Leave out the condition when a function
+  has only one case, e.g. `get_returns_inner_value`.
+- Name a test that only asserts a trait bound `implements_<trait>`, e.g.
+  `implements_send`. Such a test has no condition and no result, because it
+  asserts that a bound holds rather than exercising a function.
 - Do not test compiler-derived traits (Eq, Ord, Hash, Clone, etc.). Only test
   auto traits (Send, Sync, Unpin) and custom behavior like builder round-trips.
 - Each test should have exactly one assertion.
