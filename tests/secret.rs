@@ -40,13 +40,17 @@ fn expose_returns_secret() {
 #[cfg(feature = "secret")]
 #[test]
 fn from_str_returns_secret() {
-    let _secret: TestSecret = "test".into();
+    let secret: TestSecret = "test".into();
+
+    assert_eq!("test", secret.expose());
 }
 
 #[cfg(feature = "secret")]
 #[test]
 fn from_string_returns_secret() {
-    let _secret: TestSecret = "test".into();
+    let secret: TestSecret = "test".into();
+
+    assert_eq!("test", secret.expose());
 }
 
 #[cfg(feature = "secret")]

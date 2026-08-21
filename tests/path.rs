@@ -29,12 +29,16 @@ fn display_returns_inner_value() {
 
 #[test]
 fn from_str_returns_path() {
-    let _path: TestPath = "test".into();
+    let path: TestPath = "test".into();
+
+    assert_eq!(Path::new("test"), path.get());
 }
 
 #[test]
 fn from_string_returns_path() {
-    let _path: TestPath = String::from("test").into();
+    let path: TestPath = String::from("test").into();
+
+    assert_eq!(Path::new("test"), path.get());
 }
 
 #[test]
