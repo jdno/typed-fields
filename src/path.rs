@@ -1,5 +1,4 @@
 use proc_macro::TokenStream;
-use proc_macro2::Ident;
 use quote::quote;
 use syn::parse_macro_input;
 
@@ -8,7 +7,6 @@ use crate::Input;
 pub fn path_impl(input: TokenStream) -> TokenStream {
     let Input { attrs, ident } = parse_macro_input!(input as Input);
     let derives = derives();
-    let sea_orm_trait_impls = sea_orm_trait_impls(&ident);
 
     let newtype = quote! {
         #(#attrs)*
@@ -66,8 +64,6 @@ pub fn path_impl(input: TokenStream) -> TokenStream {
                 #ident::new(path.to_path_buf())
             }
         }
-
-        #sea_orm_trait_impls
     };
 
     newtype.into()
@@ -81,59 +77,6 @@ fn derives() -> proc_macro2::TokenStream {
     derives.extend(derive_serde());
 
     derives
-}
-
-#[cfg(feature = "sea-orm")]
-fn sea_orm_trait_impls(ident: &Ident) -> proc_macro2::TokenStream {
-    quote! {
-        impl From<#ident> for sea_orm::Value {
-            fn from(source: #ident) -> Self {
-                let string = source.get().display().to_string();
-                string.into()
-            }
-        }
-
-        impl sea_orm::TryGetable for #ident {
-            fn try_get_by<I: sea_orm::ColIdx>(result: &sea_orm::QueryResult, index: I) -> Result<Self, sea_orm::TryGetError> {
-                let string = <String as sea_orm::TryGetable>::try_get_by(result, index)?;
-                let path = std::path::PathBuf::from(string);
-
-                Ok(#ident(path))
-            }
-        }
-
-        impl sea_orm::sea_query::ValueType for #ident {
-            fn try_from(value: sea_orm::Value) -> Result<Self, sea_orm::sea_query::ValueTypeErr> {
-                let string = <String as sea_orm::sea_query::ValueType>::try_from(value)?;
-                let path = std::path::PathBuf::from(string);
-
-                Ok(#ident(path))
-            }
-
-            fn type_name() -> String {
-                stringify!(#ident).to_owned()
-            }
-
-            fn array_type() -> sea_orm::sea_query::ArrayType {
-                sea_orm::sea_query::ArrayType::String
-            }
-
-            fn column_type() -> sea_orm::sea_query::ColumnType {
-                sea_orm::sea_query::ColumnType::String(sea_orm::sea_query::StringLen::None)
-            }
-        }
-
-        impl sea_orm::sea_query::Nullable for #ident {
-            fn null() -> sea_orm::Value {
-                <String as sea_orm::sea_query::Nullable>::null()
-            }
-        }
-    }
-}
-
-#[cfg(not(feature = "sea-orm"))]
-fn sea_orm_trait_impls(_ident: &Ident) -> proc_macro2::TokenStream {
-    quote! {}
 }
 
 #[cfg(feature = "serde")]
