@@ -7,10 +7,10 @@ use typed_fields::path;
 
 path!(
     /// A doc comment for the test path
+    #[derive(serde::Deserialize, serde::Serialize)]
     TestPath
 );
 
-#[cfg(feature = "serde")]
 #[test]
 fn deserialize_returns_path() {
     let json = r#""test""#;
@@ -62,7 +62,6 @@ fn implements_unpin() {
     assert_unpin::<TestPath>();
 }
 
-#[cfg(feature = "serde")]
 #[test]
 fn serialize_returns_json() {
     let name: TestPath = "test".into();

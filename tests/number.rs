@@ -5,6 +5,7 @@ use typed_fields::number;
 
 number!(
     /// A doc comment for the test id
+    #[derive(serde::Deserialize, serde::Serialize)]
     TestId
 );
 
@@ -13,7 +14,6 @@ number!(
     TestU64, u64
 );
 
-#[cfg(feature = "serde")]
 #[test]
 fn deserialize_returns_number() {
     let json = "42";
@@ -66,7 +66,6 @@ fn implements_unpin() {
     assert_unpin::<TestId>();
 }
 
-#[cfg(feature = "serde")]
 #[test]
 fn serialize_returns_json() {
     let id = TestId::new(42);

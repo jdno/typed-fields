@@ -1,7 +1,23 @@
 // TODO: Debug this warning, fix its cause, and remove this directive.
 #![allow(non_local_definitions)]
 
-#[cfg(all(feature = "serde", feature = "url"))]
+#[cfg(feature = "url")]
+use std::convert::TryInto;
+
+#[cfg(feature = "url")]
+use url::Url;
+
+#[cfg(feature = "url")]
+use typed_fields::url;
+
+#[cfg(feature = "url")]
+url!(
+    /// A doc comment for the test URL
+    #[derive(serde::Deserialize, serde::Serialize)]
+    TestUrl
+);
+
+#[cfg(feature = "url")]
 #[test]
 fn deserialize_returns_url() {
     let json = r#""postgres://localhost:5432/postgres""#;
@@ -18,21 +34,6 @@ fn display_returns_inner_value() {
 
     assert_eq!("https://example.com/", url.to_string());
 }
-
-#[cfg(feature = "url")]
-use std::convert::TryInto;
-
-#[cfg(feature = "url")]
-use url::Url;
-
-#[cfg(feature = "url")]
-use typed_fields::url;
-
-#[cfg(feature = "url")]
-url!(
-    /// A doc comment for the test URL
-    TestUrl
-);
 
 #[cfg(feature = "url")]
 #[test]
@@ -65,7 +66,7 @@ fn implements_unpin() {
     assert_unpin::<TestUrl>();
 }
 
-#[cfg(all(feature = "serde", feature = "url"))]
+#[cfg(feature = "url")]
 #[test]
 fn serialize_returns_json() {
     let url = TestUrl::new(Url::parse("https://example.com").unwrap());

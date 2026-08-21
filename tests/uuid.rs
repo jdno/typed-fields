@@ -1,7 +1,23 @@
 // TODO: Debug this warning, fix its cause, and remove this directive.
 #![allow(non_local_definitions)]
 
-#[cfg(all(feature = "serde", feature = "uuid"))]
+#[cfg(feature = "uuid")]
+use std::convert::TryInto;
+
+#[cfg(feature = "uuid")]
+use typed_fields::uuid;
+
+#[cfg(feature = "uuid")]
+use uuid::uuid as uuid_v4;
+
+#[cfg(feature = "uuid")]
+uuid!(
+    /// A doc comment for the test UUID
+    #[derive(serde::Deserialize, serde::Serialize)]
+    TestUuid
+);
+
+#[cfg(feature = "uuid")]
 #[test]
 fn deserialize_returns_uuid() {
     let json = r#""67e55044-10b1-426f-9247-bb680e5fe0c8""#;
@@ -18,20 +34,6 @@ fn display_returns_inner_value() {
 
     assert_eq!("67e55044-10b1-426f-9247-bb680e5fe0c8", uuid.to_string());
 }
-
-#[cfg(feature = "uuid")]
-use std::convert::TryInto;
-
-#[cfg(feature = "uuid")]
-use typed_fields::uuid;
-#[cfg(feature = "uuid")]
-use uuid::uuid as uuid_v4;
-
-#[cfg(feature = "uuid")]
-uuid!(
-    /// A doc comment for the test UUID
-    TestUuid
-);
 
 #[cfg(feature = "uuid")]
 #[test]
@@ -64,7 +66,7 @@ fn implements_unpin() {
     assert_unpin::<TestUuid>();
 }
 
-#[cfg(all(feature = "serde", feature = "uuid"))]
+#[cfg(feature = "uuid")]
 #[test]
 fn serialize_returns_json() {
     let uuid = TestUuid::new(uuid_v4!("67e55044-10b1-426f-9247-bb680e5fe0c8"));

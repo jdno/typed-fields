@@ -1,7 +1,17 @@
 // TODO: Debug this warning, fix its cause, and remove this directive.
 #![allow(non_local_definitions)]
 
-#[cfg(all(feature = "secret", feature = "serde"))]
+#[cfg(feature = "secret")]
+use typed_fields::secret;
+
+#[cfg(feature = "secret")]
+secret!(
+    /// A doc comment for the test secret
+    #[derive(serde::Deserialize)]
+    TestSecret
+);
+
+#[cfg(feature = "secret")]
 #[test]
 fn deserialize_returns_secret() {
     let json = r#""test""#;
@@ -18,15 +28,6 @@ fn display_returns_redacted_value() {
 
     assert_eq!("[REDACTED]", secret.to_string());
 }
-
-#[cfg(feature = "secret")]
-use typed_fields::secret;
-
-#[cfg(feature = "secret")]
-secret!(
-    /// A doc comment for the test secret
-    TestSecret
-);
 
 #[cfg(feature = "secret")]
 #[test]

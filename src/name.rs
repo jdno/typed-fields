@@ -72,23 +72,7 @@ pub fn name_impl(input: TokenStream) -> TokenStream {
 }
 
 fn derives() -> proc_macro2::TokenStream {
-    let mut derives = quote! {
-        #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
-    };
-
-    derives.extend(derive_serde());
-
-    derives
-}
-
-#[cfg(feature = "serde")]
-fn derive_serde() -> proc_macro2::TokenStream {
     quote! {
-        #[derive(serde::Deserialize, serde::Serialize)]
+        #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Debug)]
     }
-}
-
-#[cfg(not(feature = "serde"))]
-fn derive_serde() -> proc_macro2::TokenStream {
-    quote! {}
 }

@@ -78,23 +78,7 @@ pub fn secret_impl(input: TokenStream) -> TokenStream {
 }
 
 fn derives() -> proc_macro2::TokenStream {
-    let mut derives = quote! {
-        #[derive(Clone, Debug)]
-    };
-
-    derives.extend(derive_serde());
-
-    derives
-}
-
-#[cfg(feature = "serde")]
-fn derive_serde() -> proc_macro2::TokenStream {
     quote! {
-        #[derive(serde::Deserialize)]
+        #[derive(Clone, Debug)]
     }
-}
-
-#[cfg(not(feature = "serde"))]
-fn derive_serde() -> proc_macro2::TokenStream {
-    quote! {}
 }

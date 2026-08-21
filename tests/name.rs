@@ -5,10 +5,10 @@ use typed_fields::name;
 
 name!(
     /// A doc comment for the test name
+    #[derive(serde::Deserialize, serde::Serialize)]
     TestName
 );
 
-#[cfg(feature = "serde")]
 #[test]
 fn deserialize_returns_name() {
     let json = r#""test""#;
@@ -60,7 +60,6 @@ fn implements_unpin() {
     assert_unpin::<TestName>();
 }
 
-#[cfg(feature = "serde")]
 #[test]
 fn serialize_returns_json() {
     let name = TestName::new("test");
