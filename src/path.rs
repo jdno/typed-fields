@@ -70,6 +70,18 @@ pub fn path_impl(input: TokenStream) -> TokenStream {
                 #ident::new(path.to_path_buf())
             }
         }
+
+        impl From<std::path::PathBuf> for #ident {
+            fn from(path: std::path::PathBuf) -> #ident {
+                #ident::new(path)
+            }
+        }
+
+        impl From<&std::path::PathBuf> for #ident {
+            fn from(path: &std::path::PathBuf) -> #ident {
+                #ident::new(path.clone())
+            }
+        }
     };
 
     newtype.into()

@@ -1,7 +1,7 @@
 // TODO: Debug this warning, fix its cause, and remove this directive.
 #![allow(non_local_definitions)]
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use typed_fields::path;
 
@@ -25,6 +25,20 @@ fn display_returns_inner_value() {
     let path = TestPath::new("test".into());
 
     assert_eq!("test", path.to_string());
+}
+
+#[test]
+fn from_path_buf_returns_path() {
+    let path: TestPath = PathBuf::from("test").into();
+
+    assert_eq!(Path::new("test"), path.get());
+}
+
+#[test]
+fn from_ref_path_buf_returns_path() {
+    let path: TestPath = (&PathBuf::from("test")).into();
+
+    assert_eq!(Path::new("test"), path.get());
 }
 
 #[test]
